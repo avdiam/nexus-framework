@@ -1,0 +1,15 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "nexus",
+  "description": "NEXUS — an LLM harness framework for Claude Code. Sprint/issue lifecycle, reusable patterns, cross-conversation continuity.",
+  "owner": {
+    "name": "avdiam"
+  },
+  "plugins": [
+    {
+      "name": "nexus",
+      "source": "./plugins/nexus",
+      "description": "Install NEXUS into a project. Run /nexus:setup to copy the framework (CLAUDE.md, .claude/, .nexus/) into your project root, then say \"start\"."
+    }
+  ]
+}

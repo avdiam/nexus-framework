@@ -1,0 +1,410 @@
+# documentation-registry.yaml
+# Version: 4.0.0 | Date: 2026-08-25 | Sprint: 110
+# Purpose: Catalog human-facing documentation guides for /nexus-help (Browse + Learning-path modes),
+#          /nexus-staleness-checker, /nexus-guide-creator, and /nexus-dashboard.
+#
+# ISS-089 Phase 5.1 (Sprint 110): full refresh off disk. Every `references:` entry now carries a REAL
+# path and a version read from the target file's own header — the pre-port bare names (NEXUS-CORE.md,
+# Bootstrap.md, Analyze.md, Build.md, Maintain.md, learning-extraction.md …) are gone. Verification
+# condition: a reference must resolve to a LIVE file. Resolving only into `.nexus/archived/` or
+# `.nexus/Sprints/*/archived/` counts as DEAD — eleven of the old entries did exactly that and read as
+# "found" to a naive existence check.
+#
+# DELISTED at Sprint 110 (were `status: planned` since Sprint 061 with `filepath` pointing at nothing):
+#   Coverage below is SET-LEVEL (the surviving guide set as a whole), not single-guide equivalence:
+#   - infrastructure-setup-guide  → chiefly installation-guide; `memory-first` sits in nexus-framework-guide
+#                                   and maintenance-and-evolution-guide; `sonnet-vs-opus` is retired, not moved
+#   - system-architecture-guide   → nexus-framework-guide + architecture-quick-guide
+#   - data-and-persistence-guide  → spread across 10-11 live guides (registries, state files, two-place)
+#   - customization-guide         → GENUINELY UNCOVERED (`behavioral_preferences` scores 0 hits across
+#                                   all 15 guides). Recorded as a coverage gap in ISS-246, not as a
+#                                   dead registry row.
+
+# Guide registry — schema aligned with guide-creator STEP 5 output
+guides:
+
+  architecture-quick-guide:
+    title: "NEXUS Architecture — Visual Quick Guide"
+    filepath: ".nexus/human-guides/architecture-quick-guide.md"
+    status: active
+    category: getting-started
+    target_level: beginner
+    topics: [architecture, orientation, diagrams, mermaid, layer-interaction, issue-lifecycle, boot-sequence]
+    description: "The shape of NEXUS in four Mermaid diagrams (~5 minutes) — system layers, layer interaction, the issue lifecycle, and the boot sequence. The visual companion to nexus-framework-guide.md: this guide shows, that guide explains."
+    size_kb: 9
+    created: "2026-02-22"
+    last_updated: "2026-08-27"
+    references:
+      - file: "CLAUDE.md"
+        version: "5.16.0"
+      - file: ".claude/skills/nexus-start/SKILL.md"
+        version: "2.9.2"
+      - file: ".nexus/active/NEXUS-Architecture.md"
+        version: "4.1.0"
+      - file: ".nexus/human-guides/nexus-framework-guide.md"
+        version: "2.3.1"
+
+  installation-guide:
+    title: "NEXUS Installation Guide"
+    filepath: ".nexus/human-guides/installation-guide.md"
+    status: active
+    category: getting-started
+    target_level: beginner
+    topics: [installation, setup, claude-code, plugin-route, clone-route, prerequisites, web-app, first-boot, hooks, jq, multi-project, troubleshooting]
+    description: "Zero to working NEXUS in one conversation — prerequisites, the plugin route (/nexus:setup) and the clone route (the only route for Claude Code on the web), first boot, and troubleshooting keyed to the friction points."
+    size_kb: 20
+    created: "2026-03-09"
+    last_updated: "2026-08-31"
+    references:
+      - file: "CLAUDE.md"
+        version: "5.16.0"
+      - file: ".nexus/tools/plugin/skills/setup/SKILL.md"
+        version: "1.3.0"
+      - file: ".claude/skills/nexus-start/SKILL.md"
+        version: "2.9.2"
+      - file: ".claude/skills/nexus-init-project/SKILL.md"
+        version: "3.0.0"
+      - file: ".claude/skills/nexus-setup-project/SKILL.md"
+        version: "5.2.0"
+
+  quick-start-guide:
+    title: "NEXUS Quick Start Guide"
+    filepath: ".nexus/human-guides/quick-start-guide.md"
+    status: active
+    category: getting-started
+    target_level: beginner
+    topics: [onboarding, principles, commands, first-sprint, boot, phases, issues, continuity, control-levels]
+    description: "First contact with NEXUS — what it is, the 3 core principles, essential commands, and starting your first sprint."
+    size_kb: 10
+    created: "2026-03-06"
+    last_updated: "2026-08-27"
+    references:
+      - file: "CLAUDE.md"
+        version: "5.16.0"
+      - file: ".claude/skills/nexus-start/SKILL.md"
+        version: "2.9.2"
+
+  first-project-tutorial:
+    title: "Your First NEXUS Project"
+    filepath: ".nexus/human-guides/first-project-tutorial.md"
+    status: active
+    category: getting-started
+    target_level: beginner
+    topics: [tutorial, first-project, setup-wizard, deliverables, issues, sprint-planning, daily-workflow, phase-cycle, domain-variations]
+    description: "Guided walkthrough from fresh installation to organized first sprint — setup wizard, issue generation, sprint planning, and daily workflow."
+    size_kb: 24
+    created: "2026-03-09"
+    last_updated: "2026-08-27"
+    references:
+      - file: ".claude/skills/nexus-setup-project/SKILL.md"
+        version: "5.2.0"
+      - file: ".claude/skills/nexus-generate-mvp/SKILL.md"
+        version: "3.1.1"
+      - file: ".claude/skills/nexus-organize-sprint/SKILL.md"
+        version: "2.11.0"
+      - file: ".claude/skills/nexus-start/SKILL.md"
+        version: "2.9.2"
+
+  issue-lifecycle-guide:
+    title: "Issue Lifecycle Guide"
+    filepath: ".nexus/human-guides/issue-lifecycle-guide.md"
+    status: active
+    category: domain
+    target_level: intermediate
+    topics: [issues, phases, analysis, implementation, evaluation, ISS-structure, methodology-skills, research-issues, registry-schema, two-place-updates, decomposition, closure, archival]
+    description: "The complete journey of an issue from creation to archive — 3 phases, ISS file structure, the 7 issue operations, and how methodology skills guide each phase."
+    size_kb: 28
+    created: "2026-03-06"
+    last_updated: "2026-08-24"
+    references:
+      - file: ".claude/skills/nexus-create-issue/SKILL.md"
+        version: "2.6.0"
+      - file: ".claude/skills/nexus-update-issue/SKILL.md"
+        version: "2.0.1"
+      - file: ".claude/skills/nexus-close-issue/SKILL.md"
+        version: "3.1.0"
+      - file: ".claude/skills/nexus-archive-issue/SKILL.md"
+        version: "2.0.1"
+      - file: ".claude/skills/nexus-view-issues/SKILL.md"
+        version: "2.0.0"
+      - file: ".claude/skills/nexus-work-issue/SKILL.md"
+        version: "2.1.0"
+      - file: ".claude/skills/nexus-decompose-issue/SKILL.md"
+        version: "2.2.0"
+      - file: ".nexus/templates/issue-specification.md"
+        version: "3.10.0"
+
+  sprint-management-guide:
+    title: "Sprint Management Guide"
+    filepath: ".nexus/human-guides/sprint-management-guide.md"
+    status: active
+    category: domain
+    target_level: intermediate
+    topics: [sprints, organize, status, closure, queue, modes, sprint-state, loop-back, move-issues, phase-transitions, dependencies]
+    description: "How sprints work in NEXUS — planning, monitoring, closing, the queue, and the THEMED/MIXED/DEDICATED modes."
+    size_kb: 21
+    created: "2026-03-06"
+    last_updated: "2026-08-27"
+    references:
+      - file: ".claude/skills/nexus-organize-sprint/SKILL.md"
+        version: "2.11.0"
+      - file: ".claude/skills/nexus-sprint-status/SKILL.md"
+        version: "2.0.1"
+      - file: ".claude/skills/nexus-close-sprint/SKILL.md"
+        version: "2.10.0"
+      - file: ".claude/skills/nexus-move-issues/SKILL.md"
+        version: "2.1.0"
+      - file: ".claude/skills/nexus-loop-back/SKILL.md"
+        version: "2.0.1"
+      - file: ".claude/skills/nexus-start/SKILL.md"
+        version: "2.9.2"
+      - file: ".nexus/templates/sprint-state-template.md"
+        version: "1.13.0"
+      - file: ".nexus/templates/sprint-queue-template.md"
+        version: "4.0.1"
+
+  pattern-system-guide:
+    title: "Pattern System Guide"
+    filepath: ".nexus/human-guides/pattern-system-guide.md"
+    status: active
+    category: domain
+    target_level: intermediate
+    topics: [patterns, creation, matching, effectiveness, outcome-verdicts, merge, governance, lifecycle, 4Q-validation, registry]
+    description: "How patterns capture reusable wisdom — creation behind the 4Q gate, matching, effectiveness tracking with helped/neutral/hindered verdicts, merge and cleanup, and the governance lifecycle."
+    size_kb: 24
+    created: "2026-03-06"
+    last_updated: "2026-08-27"
+    references:
+      - file: ".claude/skills/nexus-create-pattern/SKILL.md"
+        version: "2.2.0"
+      - file: ".claude/skills/nexus-delete-pattern/SKILL.md"
+        version: "2.2.0"
+      - file: ".claude/skills/nexus-list-patterns/SKILL.md"
+        version: "2.1.0"
+      - file: ".claude/skills/nexus-match-pattern/SKILL.md"
+        version: "2.3.0"
+      - file: ".claude/skills/nexus-merge-patterns/SKILL.md"
+        version: "2.1.0"
+      - file: ".claude/skills/nexus-update-pattern/SKILL.md"
+        version: "2.2.0"
+      - file: ".nexus/templates/pattern-specification.md"
+        version: "3.2.2"
+      - file: ".nexus/active/registries/patterns-registry.yaml"
+        version: "11.0.0"
+
+  project-management-guide:
+    title: "Project Management Guide"
+    filepath: ".nexus/human-guides/project-management-guide.md"
+    status: active
+    category: domain
+    target_level: intermediate
+    topics: [project, initialization, setup, scope, MVP, deliverables, project-state, lifecycle, closure, constitution, issue-generation, project-types, domain-templates, update-mode]
+    description: "Complete guide to project-level work — first-run initialization through project closure, all 7 project operations, the domain-specific template system, and the project-state.md data model."
+    size_kb: 27
+    created: "2026-03-06"
+    last_updated: "2026-08-24"
+    references:
+      - file: ".claude/skills/nexus-init-project/SKILL.md"
+        version: "3.0.0"
+      - file: ".claude/skills/nexus-setup-project/SKILL.md"
+        version: "5.2.0"
+      - file: ".claude/skills/nexus-generate-mvp/SKILL.md"
+        version: "3.1.1"
+      - file: ".claude/skills/nexus-project-status/SKILL.md"
+        version: "2.0.1"
+      - file: ".claude/skills/nexus-update-state/SKILL.md"
+        version: "2.1.0"
+      - file: ".claude/skills/nexus-close-project/SKILL.md"
+        version: "2.4.0"
+      - file: ".nexus/templates/project-state-template.md"
+        version: "2.10.1"
+
+  maintenance-and-evolution-guide:
+    title: "Maintenance & Evolution Guide"
+    filepath: ".nexus/human-guides/maintenance-and-evolution-guide.md"
+    status: active
+    category: domain
+    target_level: advanced
+    topics: [maintenance, health, orchestrator, learning-loop, behavioral-preferences, pattern-effectiveness, predictive-scheduling, registry-cleanup, issue-validation, backup-optimization, rollback, changelog, subsystem-verification, memory-layer, self-evolution]
+    description: "Comprehensive reference to system maintenance — health monitoring, predictive scheduling, the maintenance operations, the self-evolution pipeline, and system integrity verification."
+    size_kb: 41
+    created: "2026-03-06"
+    last_updated: "2026-08-27"
+    references:
+      - file: ".claude/skills/nexus-maintain/SKILL.md"
+        version: "2.4.0"
+      - file: ".claude/skills/nexus-health-diagnostic/SKILL.md"
+        version: "2.3.0"
+      - file: ".claude/skills/nexus-pattern-maintenance/SKILL.md"
+        version: "2.2.0"
+      - file: ".claude/skills/nexus-registry-cleanup/SKILL.md"
+        version: "2.4.0"
+      - file: ".claude/skills/nexus-issue-validation/SKILL.md"
+        version: "2.6.0"
+      - file: ".claude/skills/nexus-backup-optimization/SKILL.md"
+        version: "3.2.1"
+      - file: ".claude/skills/nexus-maintenance-scheduler/SKILL.md"
+        version: "2.0.2"
+      - file: ".claude/skills/nexus-rollback/SKILL.md"
+        version: "2.1.0"
+      - file: ".claude/skills/nexus-changelog-scan/SKILL.md"
+        version: "3.2.0"
+      - file: ".claude/skills/nexus-subsystem-verification/SKILL.md"
+        version: "2.4.0"
+      - file: ".claude/skills/nexus-rebuild-architecture/SKILL.md"
+        version: "2.4.0"
+      - file: ".claude/skills/nexus-index-sprint/SKILL.md"
+        version: "1.3.0"
+      - file: ".claude/skills/nexus-staleness-checker/SKILL.md"
+        version: "3.1.0"
+      - file: ".nexus/templates/system-state-template.md"
+        version: "3.5.0"
+      - file: "CLAUDE.md"
+        version: "5.16.0"
+
+  navigation-and-commands-guide:
+    title: "Navigation & Commands Guide"
+    filepath: ".nexus/human-guides/navigation-and-commands-guide.md"
+    status: active
+    category: system-reference
+    target_level: beginner
+    topics: [menus, commands, routing, natural-language, triggers, command-reference, menu-system]
+    description: "How to interact with NEXUS — the two ways to navigate, the command reference, how routing works, and the menu system."
+    size_kb: 9
+    created: "2026-03-06"
+    last_updated: "2026-08-27"
+    references:
+      - file: "CLAUDE.md"
+        version: "5.16.0"
+      - file: ".claude/skills/nexus-menu/SKILL.md"
+        version: "3.5.0"
+
+  documentation-system-guide:
+    title: "Documentation System Guide"
+    filepath: ".nexus/human-guides/documentation-system-guide.md"
+    status: active
+    category: domain
+    target_level: intermediate
+    topics: [documentation, help, browse-mode, learning-path, staleness-checker, guide-creator, documentation-registry, dashboard, guide-generation, staleness-detection]
+    description: "How NEXUS documentation works — browsing guides, generating new ones, checking freshness, getting help, and following learning paths."
+    size_kb: 19
+    created: "2026-03-06"
+    last_updated: "2026-08-27"
+    references:
+      - file: ".claude/skills/nexus-help/SKILL.md"
+        version: "3.2.0"
+      - file: ".claude/skills/nexus-dashboard/SKILL.md"
+        version: "2.2.0"
+      - file: ".claude/skills/nexus-guide-creator/SKILL.md"
+        version: "2.2.1"
+      - file: ".claude/skills/nexus-staleness-checker/SKILL.md"
+        version: "3.1.0"
+      - file: ".nexus/templates/human-guide-template.md"
+        version: "1.0.2"
+      - file: ".nexus/active/registries/documentation-registry.yaml"
+        version: "4.0.0"
+      - file: ".nexus/active/NEXUS-Architecture.md"
+        version: "4.1.0"
+
+  troubleshooting-guide:
+    title: "NEXUS Troubleshooting Guide"
+    filepath: ".nexus/human-guides/troubleshooting-guide.md"
+    status: active
+    category: getting-started
+    target_level: all
+    topics: [troubleshooting, installation, setup, context, checkpoints, issues, sprints, file-operations, recovery, common-mistakes, discovery]
+    description: "Symptom-based troubleshooting from installation to daily workflow — what you see, why it happens, how to fix it, plus file recovery and discovery tools."
+    size_kb: 15
+    created: "2026-03-09"
+    last_updated: "2026-08-27"
+    references:
+      - file: "CLAUDE.md"
+        version: "5.16.0"
+      - file: ".claude/skills/nexus-start/SKILL.md"
+        version: "2.9.2"
+      - file: ".claude/skills/nexus-checkpoint/SKILL.md"
+        version: "2.5.0"
+      - file: ".nexus/active/Emergency-Reference.md"
+        version: "2.0.2"
+
+  methodology-files-guide:
+    title: "Methodology Skills Guide"
+    filepath: ".nexus/human-guides/methodology-files-guide.md"
+    status: active
+    category: system-reference
+    target_level: intermediate
+    topics: [methodologies, analyze, research, build, batch-mode, validate, maintain, phase-routing, step-structure, simple-vs-complex-path, checkpoint-continuity, preferences]
+    description: "How methodology skills work — the five phase skills plus Build's batch sub-mode, their shared step structure, simple vs complex paths, phase routing and loading, checkpoint continuity, and how behavioral preferences shape interpretation."
+    size_kb: 17
+    created: "2026-03-06"
+    last_updated: "2026-08-27"
+    references:
+      - file: ".claude/skills/nexus-analyze/SKILL.md"
+        version: "4.5.0"
+      - file: ".claude/skills/nexus-research/SKILL.md"
+        version: "2.10.1"
+      - file: ".claude/skills/nexus-build/SKILL.md"
+        version: "3.2.0"
+      - file: ".claude/skills/nexus-build/batch.md"
+        version: "1.5.0"
+      - file: ".claude/skills/nexus-validate/SKILL.md"
+        version: "3.7.0"
+      - file: ".claude/skills/nexus-maintain/SKILL.md"
+        version: "2.4.0"
+
+  nexus-framework-guide:
+    title: "NEXUS Framework — Complete System Guide"
+    filepath: ".nexus/human-guides/nexus-framework-guide.md"
+    status: active
+    category: getting-started
+    target_level: all
+    topics: [overview, architecture, domains, workflows, methodologies, cognitive-tools, patterns, maintenance, self-evolution, continuity, control-levels, context-zones, memory-layer, project-management, sprint-management, issues, health-system, documentation]
+    description: "Complete system reference — what NEXUS is, how it works, all domains, flows, methodologies, cognitive tools, and the self-maintaining health system. The canonical explanation of context zones, Control Levels, and the framework's architecture; other getting-started guides point here rather than restating it."
+    size_kb: 37
+    created: "2026-03-06"
+    last_updated: "2026-08-27"
+    references:
+      - file: "CLAUDE.md"
+        version: "5.16.0"
+      - file: ".nexus/active/NEXUS-Architecture.md"
+        version: "4.1.0"
+      - file: ".nexus/templates/issue-specification.md"
+        version: "3.10.0"
+
+  cognitive-tools-guide:
+    title: "Cognitive Tools Guide"
+    filepath: ".nexus/human-guides/cognitive-tools-guide.md"
+    status: active
+    category: system-reference
+    target_level: intermediate
+    topics: [cognitive-tools, mental-models, problem-solving, strategic-approaches, strategic-reflection, complexity-gating, adversarial-review]
+    description: "Thinking tools — 6 mental models, 7 problem-solving tools, 9 strategic approaches plus the strategic reflection protocol, offered automatically at complexity ≥ 3."
+    size_kb: 12
+    created: "2026-03-06"
+    last_updated: "2026-08-27"
+    references:
+      - file: ".claude/skills/nexus-mental-models/SKILL.md"
+        version: "3.2.1"
+      - file: ".claude/skills/nexus-problem-solving/SKILL.md"
+        version: "3.3.4"
+      - file: ".claude/skills/nexus-strategic/SKILL.md"
+        version: "3.1.3"
+      - file: "CLAUDE.md"
+        version: "5.16.0"
+
+  integration-test-suite:
+    title: "Integration Test Suite (Runtime/Behavioral)"
+    filepath: ".nexus/tests/README.md"
+    status: active
+    category: system-reference
+    target_level: advanced
+    topics: [testing, behavioral-scenarios, hook-tests, runtime-verification, self-execution-protocol, state-assertions, static-vs-runtime-overlap, integration-testing]
+    description: "Runtime/behavioral integration-test layer (ISS-086) — LLM-executed behavioral scenario specs (boot, sprint/issue/methodology lifecycle, checkpoint-continuity) plus an executable bash hook-test harness for the hook scripts. Complements (does not duplicate) the static subsystem-verification campaign; see the suite's static-vs-runtime overlap statement. Phase-2 expansion tracked by ISS-087."
+    size_kb: 7
+    created: "2026-06-03"
+    last_updated: "2026-08-27"
+    references:
+      - file: ".claude/skills/nexus-start/SKILL.md"
+        version: "2.9.2"
+      - file: ".claude/skills/nexus-build/SKILL.md"
+        version: "3.2.0"

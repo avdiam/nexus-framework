@@ -1,0 +1,1 @@
+{"type":"assistant","isSidechain":false,"message":{"usage":{"input_tokens":100000,"cache_read_input_tokens":0,"cache_creation_input_tokens":0},"content":[{"type":"text","text":"Some work narration here.\nMore narration on a second line.\nSprint: #096 | Conv: #5 | ISS-086 | 100K [10%]"}]}}

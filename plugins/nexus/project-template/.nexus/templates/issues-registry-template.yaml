@@ -1,0 +1,31 @@
+# issues-registry-template.yaml
+# Version: 1.0.1 | Date: 2026-08-20 | Sprint: 110
+# Instance version: copy this header's version to instances created from this template
+# Format: Prefixed YAML (ISS-XXX.fieldname: value) for reliable patching
+# Schema: v7.0.0 — 18 fields per entry (see issue-specification.md#[Section: Registry-Schema])
+
+# --- Metadata ---
+last_id: 0
+total_active: 0
+
+# --- ENTRY TEMPLATE (for reference — remove when first issue created) ---
+# ISS-XXX.title: "Action verb + object + context"
+# ISS-XXX.type: "Bug|Feature|Improvement|Refactor|Documentation|Question|Research|Creative"
+# ISS-XXX.file: "issues/ISS-XXX.md"
+# ISS-XXX.description: "1-2 sentence summary for matching"
+# ISS-XXX.priority: "Critical|High|Medium|Low"
+# ISS-XXX.impact: "Critical|High|Medium|Low"
+# ISS-XXX.status: "Open"
+# ISS-XXX.complexity: 1-5
+# ISS-XXX.created: "YYYY-MM-DD"
+# ISS-XXX.created_in_sprint: "NNN"
+# ISS-XXX.target_sprint: "NNN|TBD"
+# ISS-XXX.blocks: []
+# ISS-XXX.blocked_by: []
+# ISS-XXX.scope_files: []
+# ISS-XXX.analyzed: 1
+# ISS-XXX.implemented: 1
+# ISS-XXX.evaluated: 1
+# ISS-XXX.notes: ""
+
+# --- INSERT NEW ISSUES HERE ---

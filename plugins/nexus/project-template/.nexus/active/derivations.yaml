@@ -1,0 +1,1092 @@
+# derivations.yaml
+# Version: 1.6.0 | Date: 2026-08-28 | Sprint: 112
+#
+# THE DERIVATION EDGE MANIFEST.
+#
+# NEXUS is good at correcting a source of truth and had no mechanism for propagating that
+# correction to the derived copies, the existing instances, or the tools that read them.
+# The root defect was never "corrections fail to propagate" — it was that NEXUS had no
+# DECLARATION of what is derived from what, so no check could target a relationship nobody
+# wrote down. This file is that declaration. (ISS-240, Sprint 111.)
+#
+# NOT A FIFTH REGISTRY. The four registries hold entity metadata with a lifecycle
+# (issues, patterns, changelog, documentation). This holds edge declarations with none.
+# Different in kind — it does not trigger the registry cascade. (ISS-240 D-3.)
+#
+# ─────────────────────────────────────────────────────────────────────────────────────
+# SCHEMA (one block per edge)
+#
+#   id                the edge's stable identifier (E-NN). Never renumbered.
+#   source            the canonical artifact. Corrections land here.
+#   derived           what holds a copy, an instance, or a filter of the source's value.
+#   direction         one of:
+#                       template-to-instance     content conformance; mtime cannot express it
+#                       source-to-copy           a hand-maintained second copy of a canonical value
+#                       producer-to-consumer     a producer's vocabulary vs a consumer's filter
+#                       mtime                    derived artifact older than its source set
+#   runs_at           boot | <skill-name>. Predicates needing registry semantics execute inside
+#                     their owning skill and are LISTED here so the edge set stays enumerable by
+#                     one command — that enumerability is the whole point (ISS-240 [T1] Choice).
+#   predicate         executable. Shell preferred: cheap at boot, inspectable, no interpreter.
+#   fixture           MANDATORY, non-empty on every row. A predicate authored to pass and never
+#                     fired at a broken input is this issue's defect wearing its own mechanism
+#                     (R3). Fixtures execute at Build/Validate, NOT at boot.
+#   disposition       must-check | eliminable. Answers PAT-130's "should this derived copy exist
+#                     at all?" per-edge at declaration time rather than deferring it forever.
+#   first_seen_stale  null, or the sprint the edge first reported stale. An edge stale for >= 2
+#                     sprints escalates to sprint-state [SYSTEM_ISSUES] at the next checkpoint
+#                     instead of printing the same header line forever (R2 — demonstrated live:
+#                     the NEXUS-Architecture edge went 2 -> 8 newer sources across 6 conversations
+#                     while its warning printed every boot and was walked past every time).
+#
+# ─────────────────────────────────────────────────────────────────────────────────────
+# THE VERDICT CONTRACT (inherited from ISS-248, operation-skill-template.md VC-2 @ 2.9.0)
+#
+# Every predicate terminates FILLED / ESCALATED / SKIP — never a bare "clean" or "0 findings".
+# A FILLED verdict carries the PAIR, with the unit named in parentheses:
+#
+#     {findings} findings / {bound} bound ({unit}) / {candidates} candidates ({unit})
+#
+#   candidates  how many items the check was SUPPOSED to examine, derived from the corpus.
+#   bound       how many it actually resolved — parsed, matched, opened. The consumption proof.
+#
+#   bound < candidates      -> ESCALATED. The instrument did not consume its input.
+#   candidates == 0         -> ESCALATED. An empty candidate set is a wrong path OR a real
+#                              finding and the predicate cannot tell which. Found by sabotage
+#                              during this issue's own Phase 1: `0 findings / 0 bound / 0
+#                              candidates` satisfies `bound < candidates` (0 < 0 is false) and
+#                              passes as FILLED — a clean verdict on a corpus never read.
+#                              (ISS-240 IE-3 — RULED contract-level at Evaluation, Sprint 111.
+#                              Now stated in operation-skill-template VC-2 @ 2.9.0; this row is
+#                              a restatement for the reader, not a second home for the rule.)
+#   findings > candidates   -> ESCALATED. Not a near-miss: proof the two figures were never
+#                              counted over the same corpus. Both mtime edges shipped
+#                              `108 findings / 106 candidates` until a sabotage arm printed it.
+#                              (ISS-240 IE-8b; ruled contract-level at Evaluation, Sprint 111.)
+#
+#   SKIP (justified)        -> the question the predicate asks HAS NO MEANING for this corpus
+#                              yet. Not "found nothing" - "there is nothing to ask about". Exit 0.
+#                              Inherited unchanged from operation-skill-template.md VC-2 @ 2.9.0
+#                              ("Check deliberately N/A to this artifact | explicit justification
+#                              + the rule that permits the skip"); this row is a restatement for
+#                              the reader, not a second home for the rule. E-11 has emitted it
+#                              since Sprint 111 - the vocabulary is not new, only its boot-time
+#                              use is. (ISS-101 step 2.4, Sprint 112.)
+#
+#                              A SKIP MUST KEY ON A POSITIVE SIGNAL, NEVER ON A BARE CANDIDATE
+#                              COUNT. `candidates == 0` stays ESCALATED - that is the whole IE-3
+#                              ruling, and a dev tree whose glob broke must keep escalating. The
+#                              only signal sanctioned at boot is the FRESH-TREE GUARD below.
+#
+#   `bound` MUST BE INDEPENDENTLY DERIVED — never assigned from `candidates`, never the same
+#   variable printed twice, never two counters incremented in lockstep. Increment it AFTER the
+#   guard that can skip or fail, so a failure to consume is observable. Measured across this
+#   manifest's own 15 predicates at Evaluation: NINE could not satisfy `bound < candidates` at
+#   all — seven printed one variable twice, two shared a constant. E-14 is the reference shape
+#   (its `continue` sits between the two counters, and it asserts the inequality). The one
+#   legitimate exception is a denominator fixed by the schema — E-04's 12 Routing-Map groups,
+#   E-08's 2 assertions — and it is legitimate ONLY because a separate positive guard proves the
+#   subject was located and read. E-07 was the counter-example: `cand=1` hardcoded with no such
+#   guard returned an IDENTICAL clean verdict on the live tree, on a renamed consumer, and on a
+#   COMPLETELY EMPTY FILE. (ISS-240 Evaluation, Sprint 111 Conv 8.)
+#
+# ─────────────────────────────────────────────────────────────────────────────────────
+# THE FRESH-TREE GUARD (ISS-101 step 2.4, Sprint 112) - the ONE sanctioned SKIP at boot.
+#
+# THIS MANIFEST SHIPS. On an adopter's very first boot the tree has no ISS files, no operation
+# telemetry, no queue narrative and only template placeholders - so five edges asked a question
+# with no subject and terminated ESCALATED, or reported placeholder-vs-placeholder disagreement
+# as findings. Correct emptiness reported as failure. ISS-100 SC-10 requires that first boot to
+# print NO warning line, and the predicates are not wrong: the corpus does not exist yet.
+#
+# CANONICAL SHAPE (PAT-113 - one home for the rule; each guarded predicate carries an instance
+# and a pointer comment back here). Copy verbatim as the FIRST executable lines, before any work:
+#
+#     _lc=$(grep -m1 -oE '^_project_lifecycle: [a-z-]+' #             .nexus/active/states/sprint-state.md 2>/dev/null | awk '{print $2}')
+#     case "${_lc:-}" in not-defined|defining)
+#       echo "SKIP (justified): {what has no subject yet} - project not yet set up"; exit 0 ;;
+#     esac
+#
+# WHY A POSITIVE SIGNAL. Keyed on `_project_lifecycle`, never on `candidates == 0`. A dev tree
+# whose glob broke has candidates 0 AND lifecycle `active`, so it still ESCALATES. An unreadable
+# sprint-state leaves `_lc` empty, the case falls through, and the predicate runs and escalates:
+# the guard fails TOWARD the check, never toward the skip.
+#
+# PLACEMENT IS BEFORE THE FIRST COMPARISON, NOT INSIDE AN ESCALATION BRANCH. E-14 terminates
+# `FILLED: 4 findings` on a fresh tree rather than ESCALATED - a guard hung off the escalation
+# path would have missed it entirely. One guard shape, two exit paths.
+#
+# IT LIFTS BY ITSELF. /nexus-setup-project moves the lifecycle to `active`, and every guarded
+# edge resumes full coverage at the adopter's next boot. No second switch to remember, and no
+# export-side filtering - filtering the edges out of the shipped file would blind adopters
+# permanently, which is the remedy this issue explicitly rejected.
+#
+# WORKED EXAMPLES - one per verdict class, all on E-01, so calibration travels with the rule
+# instead of being re-derived (PAT-107):
+#
+#   adopter's first boot        lifecycle `not-defined`, guard fires
+#       SKIP (justified): no ISS files exist yet - project not yet set up
+#   this dev tree today         lifecycle `active`, guard falls through
+#       FILLED: 10 findings / 18 bound (complex ISS files) / 18 candidates (complex ISS files)
+#   dev tree, glob broken       lifecycle `active`, guard falls through, the floor fires
+#       ESCALATED: candidates 0 (complex ISS files)
+#
+# The third is the load-bearing one: it is exactly what a `candidates == 0` guard would have
+# swallowed, and it is why the signal is the lifecycle and not the count.
+#
+# Exit criteria are phrased "every hit fixed or classified", NEVER "returns 0" (PAT-142).
+# A token can have live homonyms; "returns 0" is then satisfiable only by editing correct
+# files into wrong ones.
+#
+# ─────────────────────────────────────────────────────────────────────────────────────
+# NON-FATAL EXECUTION (R6 — this manifest is swept from the boot path).
+# A failing predicate reports a warning and the sweep CONTINUES, mirroring /nexus-start
+# STEP 4's existing "boot never fails on a missing section" discipline. No predicate in this
+# file may abort a boot.
+
+meta:
+  version: "1.6.0"
+  owner_issue: "ISS-240"
+  swept_by: ".claude/skills/nexus-start/SKILL.md STEP 4"
+  rate_limited_by: ".nexus/.freshness-checked"
+  edge_count: 16
+  must_check_count: 10
+  eliminable_count: 6
+
+edges:
+
+  # ══ DIRECTION 1 — template to existing instances ═════════════════════════════════════
+  # The direction mtime cannot express. A template corrected today leaves every file
+  # scaffolded before that correction holding the old shape, and nothing reads them again.
+
+  - id: E-01
+    source: ".nexus/templates/issue-specification.md"
+    derived: ".nexus/issues/ISS-*.md (complexity >= 3)"
+    direction: template-to-instance
+    runs_at: boot
+    disposition: must-check
+    first_seen_stale: null
+    predicate: |
+      # FRESH-TREE GUARD - contract and worked examples in this file's header (PAT-113).
+      # First executable lines, before any comparison: this edge terminates on BOTH paths and a
+      # guard placed in an escalation branch would not cover the other one.
+      _lc=$(grep -m1 -oE '^_project_lifecycle: [a-z-]+' \n              .nexus/active/states/sprint-state.md 2>/dev/null | awk '{print $2}')
+      case "${_lc:-}" in not-defined|defining)
+        echo "SKIP (justified): no ISS files exist yet - project not yet set up"; exit 0 ;;
+      esac
+      # Bound is DERIVED from the template at run time, never hardcoded, and anchored on
+      # literal headings rather than line numbers — a line-number anchor would itself be a
+      # hand-maintained derived copy, i.e. this issue's defect inside its own predicate.
+      bound=$(awk '/^### ISS File Template$/,/^### Section Reference$/' \
+                .nexus/templates/issue-specification.md | grep -c '<!-- GUIDANCE')
+      [ "$bound" -eq 0 ] && { echo "ESCALATED: bound 0 (template guidance set)"; exit 2; }
+      thresh=$(( bound / 2 ))
+      # `read` IS THE CONSUMPTION PROOF — incremented AFTER the parse that can fail, never
+      # in lockstep with `cand`. Through v1.3.0 the verdict printed $cand for both figures,
+      # so `bound < candidates` was unsatisfiable by construction and could never fire.
+      # (VC-2 @ 2.9.0, ruled at ISS-240 Evaluation.)
+      cand=0; read=0; flagged=0
+      for f in .nexus/issues/ISS-*.md; do
+        c=$(grep -oE 'Complexity: [0-9]' "$f" | head -1 | grep -oE '[0-9]')
+        [ -n "$c" ] && [ "$c" -ge 3 ] || continue
+        cand=$((cand+1)); n=$(grep -c '<!-- GUIDANCE' "$f" 2>/dev/null)
+        case "$n" in ''|*[!0-9]*) continue ;; esac   # unreadable: a candidate, NOT bound
+        read=$((read+1))
+        [ "$n" -lt "$thresh" ] && { flagged=$((flagged+1)); \
+          echo "  $(basename "$f" .md) $n/$bound $([ "$n" -eq 0 ] && echo absent || echo PARTIAL)"; }
+      done
+      [ "$cand" -eq 0 ] && { echo "ESCALATED: candidates 0 (complex ISS files)"; exit 2; }
+      [ "$read" -lt "$cand" ] && { echo "ESCALATED: bound $read < candidates $cand (complex ISS files) — $(( cand - read )) file(s) did not parse"; exit 2; }
+      [ "$flagged" -gt "$cand" ] && { echo "ESCALATED: findings $flagged > candidates $cand (complex ISS files) — the two figures were not counted over the same corpus"; exit 2; }
+      echo "FILLED: $flagged findings / $read bound (complex ISS files) / $cand candidates (complex ISS files)"
+    fixture: |
+      A: the zero-guidance complex ISS files -> reported 10 [absent].
+      B: ISS-136 (C:4, 1 guidance comment vs a 28 bound) -> reported [PARTIAL]. This is the
+         too-narrow case the original binary framing could not express; a zero/non-zero
+         predicate calls ISS-136 conforming.
+      Sabotage (PAT-140), all three ESCALATE with visibly different output, exit 2:
+         (i) nonexistent template path   (ii) marker key that does not exist
+         (iii) corpus dir with no ISS files  <- this one FAILED on first run, returning
+              `FILLED: 0/0/0`. See the candidates==0 rule above. Fixed and re-verified.
+      False-positive arm: ISS-245/246/247/248/249 (24-27 comments each) NOT flagged. 0 FP.
+      Executed Conv 6, Sprint 111. Clean run: 11 findings / 20 bound / 20 candidates.
+
+  - id: E-02
+    source: ".nexus/templates/issue-specification.md (post-port, `Build.md` removed)"
+    derived: ".nexus/issues/ISS-*.md"
+    direction: template-to-instance
+    runs_at: boot
+    disposition: must-check
+    first_seen_stale: null
+    predicate: |
+      # FRESH-TREE GUARD - contract and worked examples in this file's header (PAT-113).
+      # First executable lines, before any comparison: this edge terminates on BOTH paths and a
+      # guard placed in an escalation branch would not cover the other one.
+      _lc=$(grep -m1 -oE '^_project_lifecycle: [a-z-]+' \n              .nexus/active/states/sprint-state.md 2>/dev/null | awk '{print $2}')
+      case "${_lc:-}" in not-defined|defining)
+        echo "SKIP (justified): no ISS files exist yet - project not yet set up"; exit 0 ;;
+      esac
+      # E-01's JUDGMENT-SHAPED COMPANION, not an independent edge (PAT-142 step 1).
+      # E-01 counts guidance PRESENCE and is structurally incapable of seeing guidance that
+      # is present but WRONG: ISS-087/100/101/116 each carry 25-26 comments — sailing past
+      # E-01's threshold — and 2 stale `Build.md` references INSIDE those comments. Neither
+      # predicate certifies this corpus alone.
+      # Self-referential token: it also appears in files that DOCUMENT the defect, so hits
+      # are CLASSIFIED and counts re-derived at read time, never committed (ISS-248 TD-5).
+      # NOTE: `grep -c` exits 1 when the count is ZERO, so the first draft's
+      # `src=$(grep -c ...) || escalate` fired its failure branch precisely when the source
+      # was CLEAN — it ESCALATED on a perfectly readable template, and would have done so on
+      # every boot. Readability is now tested separately. (Found by dogfooding, Conv 6.)
+      spec=.nexus/templates/issue-specification.md
+      [ -f "$spec" ] || { echo "ESCALATED: source template unreadable"; exit 2; }
+      src=$(grep -c 'Build\.md' "$spec" 2>/dev/null); [ -n "$src" ] || src=0
+      [ "$src" -ne 0 ] && { echo "ESCALATED: source still carries the token ($src hits) — the correction never landed"; exit 2; }
+      # `read` IS THE CONSUMPTION PROOF (VC-2 @ 2.9.0) — incremented only after the grep
+      # returns a number. Through v1.3.0 the verdict printed $cand for both figures, so
+      # `bound < candidates` was unsatisfiable by construction in this edge too.
+      cand=0; read=0; defect=0; homonym=0
+      for f in .nexus/issues/ISS-*.md; do
+        # [ -f ] BEFORE the counter. An unmatched glob stays literal, `grep -c` on a
+        # nonexistent path prints nothing, and `[ "" -eq 0 ]` exits 2 rather than 0 - so the
+        # `continue` guard FAILS OPEN and the loop credits a candidate that does not exist,
+        # which makes the candidates==0 floor below unreachable. Executed on an empty corpus
+        # the pre-fix predicate returned `FILLED: 0 findings / 1 bound / 1 candidates`:
+        # THE VACUOUS PASS OF IE-3, IN THE EDGE THAT WAS REPAIRED FOR IE-3, because the
+        # counter was placed one line above the existence check. (Independent review, Conv 7.)
+        [ -f "$f" ] || continue
+        cand=$((cand+1))
+        n=$(grep -c 'Build\.md' "$f" 2>/dev/null)
+        case "$n" in ''|*[!0-9]*) continue ;; esac   # unreadable: a candidate, NOT bound
+        read=$((read+1))
+        [ "$n" -eq 0 ] && continue
+        r=$(grep 'Build\.md' "$f" | grep -c '<!-- GUIDANCE')
+        if [ "$r" -gt 0 ]; then defect=$((defect+1)); echo "  $(basename "$f" .md) $r in-guidance [RESIDUE]"
+        else homonym=$((homonym+1)); echo "  $(basename "$f" .md) $n prose [LIVE HOMONYM]"; fi
+      done
+      [ "$cand" -eq 0 ] && { echo "ESCALATED: candidates 0 (ISS files)"; exit 2; }
+      [ "$read" -lt "$cand" ] && { echo "ESCALATED: bound $read < candidates $cand (ISS files) — $(( cand - read )) file(s) did not parse"; exit 2; }
+      [ "$defect" -gt "$cand" ] && { echo "ESCALATED: findings $defect > candidates $cand (ISS files)"; exit 2; }
+      echo "FILLED: $defect findings / $read bound (ISS files) / $cand candidates (ISS files)"
+      echo "  every hit fixed or classified: $defect RESIDUE + $homonym LIVE HOMONYM"
+    fixture: |
+      B: ISS-087/100/101/116 -> 4 [RESIDUE], each 2 hits inside GUIDANCE comments.
+      Homonym arm: ISS-240.md itself -> [LIVE HOMONYM]; it quotes the instance rather than
+         carrying it. Its hit count moved 2 -> 5 during Conv 6 purely by being documented,
+         which is why the count is never committed. An exit criterion of "returns 0" here is
+         satisfiable ONLY by corrupting a correct file (PAT-142, too-broad direction).
+      Sabotage: (i) token still present in the source template -> ESCALATED "the correction
+         never landed"  (ii) source template unreadable -> ESCALATED. Both exit 2.
+      Executed Conv 6, Sprint 111. Clean run: 4 findings / 23 bound / 23 candidates.
+
+  - id: E-03
+    source: ".nexus/templates/pattern-specification.md (16-field schema; `**Maturity**` dropped)"
+    derived: ".nexus/patterns/PAT-*.md"
+    direction: template-to-instance
+    runs_at: boot
+    disposition: must-check
+    first_seen_stale: null
+    predicate: |
+      cand=$(ls .nexus/patterns/PAT-*.md 2>/dev/null | wc -l)
+      [ "$cand" -eq 0 ] && { echo "ESCALATED: candidates 0 (PAT files)"; exit 2; }
+      # BOUND IS INDEPENDENTLY DERIVED (VC-2 @ 2.9.0): `grep -l ''` lists only files grep
+      # could actually OPEN AND READ A LINE FROM. A PAT file that is unreadable or empty is
+      # a candidate that is not bound, so the shortfall is visible. Through v1.3.0 this
+      # verdict printed $cand twice and the inequality could never fire.
+      read=$(grep -l '' .nexus/patterns/PAT-*.md 2>/dev/null | wc -l)
+      [ "$read" -lt "$cand" ] && { echo "ESCALATED: bound $read < candidates $cand (PAT files) — $(( cand - read )) file(s) unreadable or empty"; exit 2; }
+      n=$(grep -l '\*\*Maturity\*\*' .nexus/patterns/PAT-*.md 2>/dev/null | wc -l)
+      [ "$n" -gt "$cand" ] && { echo "ESCALATED: findings $n > candidates $cand (PAT files)"; exit 2; }
+      echo "FILLED: $n findings / $read bound (PAT files) / $cand candidates (PAT files)"
+    fixture: |
+      Regression guard, currently clean: 0 findings / 56 bound / 56 candidates (Conv 6).
+      Historical broken state: 9 of 52 PAT files carried the line and 4 DISAGREED WITH THE
+      REGISTRY — the check's value is that it fires again if the line is reintroduced.
+      Fires-on-broken proof: `git stash` any PAT file with `**Maturity**` restored, or
+      re-run against the Sprint-109 tree where 9 files carried it.
+
+  # ══ DIRECTION 2 — canonical source to hand-maintained second copy ════════════════════
+  # Instances 3, 4 and 8 all CLOSED on disk before this issue reached Build — each because
+  # a human happened to notice, never because a mechanism fired. That left this direction
+  # with NO live fixture, and SC-02 not demonstrable as written. E-07 supplies one.
+
+  - id: E-04
+    source: "CLAUDE.md [Section: Routing-Map] (authoritative on all 54 skills)"
+    derived: ".claude/skills/nexus-rebuild-architecture/SKILL.md STEP 3 domain table"
+    direction: source-to-copy
+    runs_at: boot
+    disposition: eliminable
+    first_seen_stale: null
+    elimination_note: |
+      ELIMINABLE and DEFERRED, on a stated dependency rather than on silence. STEP 3's domain
+      table could be derived from Routing-Map at run time instead of hand-listed. Not taken
+      here: ISS-243 owns nexus-rebuild-architecture and the queue marks the pair
+      do-not-co-schedule. Until then the edge is checked, not eliminated.
+    predicate: |
+      # VOCABULARY INTERSECTION, not a count comparison. The first draft compared
+      # rebuild-architecture DOMAINS against Routing-Map COMMAND GROUPS — two different
+      # vocabularies — and reported `bound 10 > candidates 9` as FILLED. Two figures counting
+      # different things are not a pair. (Found by dogfooding, Conv 6.)
+      cl=CLAUDE.md; ra=.claude/skills/nexus-rebuild-architecture/SKILL.md
+      groups=$(grep -oE '^# === [A-Z]+' "$cl" | sed 's/# === //')
+      cand=$(echo "$groups" | grep -c '[A-Z]')
+      [ "$cand" -eq 0 ] && { echo "ESCALATED: candidates 0 (Routing-Map groups)"; exit 2; }
+      doms=$(grep -oE '\([0-9]+ at Sprint [0-9]+: [^)]+\)' "$ra" \
+               | sed 's/.*: //; s/)//' | tr ',' '\n' | tr -d ' ' | tr 'a-z' 'A-Z')
+      [ -z "$doms" ] && { echo "ESCALATED: bound 0 (declared domains) — the domain table did not parse"; exit 2; }
+      bound=0; n=0
+      for g in $groups; do
+        bound=$((bound+1))
+        echo "$doms" | grep -qx "$g" && continue
+        # Exit criterion is "every hit fixed or classified", never "returns 0" (PAT-142).
+        # SEEDS and MENUS are live homonyms — routing groups legitimately not architecture
+        # domains. Classifying costs one line and keeps the check satisfiable by correct work.
+        case "$g" in
+          SEEDS|MENUS) echo "  $g [CLASSIFIED — routing group, not an architecture domain]" ;;
+          *) n=$((n+1)); echo "  $g present in Routing-Map, ABSENT from the domain table [FINDING]" ;;
+        esac
+      done
+      echo "FILLED: $n findings / $bound bound (Routing-Map groups) / $cand candidates (Routing-Map groups)"
+    fixture: |
+      Historical broken state: the table hardcoded NINE domains and omitted the entire
+      .nexus/memory/ subsystem while Routing-Map listed it. Closed at 2.3.0 (now 10, incl.
+      Memory, SKILL.md :144). Fires-on-broken proof: check out the pre-2.3.0 file from git
+      and confirm bound(9) < candidates and the verdict terminates ESCALATED.
+
+  - id: E-05
+    source: ".nexus/active/states/system-state.md [Health-Operations] telemetry"
+    derived: ".nexus/active/states/system-state.md [Learned-Patterns].operation_effectiveness.most_valuable"
+    direction: source-to-copy
+    runs_at: boot
+    disposition: eliminable
+    first_seen_stale: null
+    elimination_note: |
+      ELIMINABLE. `most_valuable` is derivable from the telemetry it once contradicted, and
+      the two live in the SAME FILE — the broken version named an operation as most valuable
+      three lines above the telemetry showing 12 consecutive skips and 0 executions. Kept as
+      a checked edge only because the ranking is by FINDING value, not score movement
+      (most_valuable_note), which is a judgment the telemetry alone does not carry.
+    predicate: |
+      # FRESH-TREE GUARD - contract and worked examples in this file's header (PAT-113).
+      # First executable lines, before any comparison: this edge terminates on BOTH paths and a
+      # guard placed in an escalation branch would not cover the other one.
+      _lc=$(grep -m1 -oE '^_project_lifecycle: [a-z-]+' \n              .nexus/active/states/sprint-state.md 2>/dev/null | awk '{print $2}')
+      case "${_lc:-}" in not-defined|defining)
+        echo "SKIP (justified): system-state carries no operation telemetry yet - project not yet set up"; exit 0 ;;
+      esac
+      # ⚠️ THIS EDGE WAS CHECKING A FIELD THAT DOES NOT EXIST.
+      # As authored at Conv 6 it grepped for `executions:` in system-state.md. That token
+      # appears ZERO times in the file - the schema has no such field - so the lookup never
+      # resolved, and because `bound` was incremented unconditionally the edge reported
+      # `FILLED: 0 findings / 2 bound / 2 candidates` for two conversations. A clean verdict
+      # on a field it could not read: instance 5's shape (a filter matching nothing) living
+      # inside the manifest built to detect instance 5. Found only when an independent review
+      # asked why `bound` was credited before the parse succeeded. (Conv 7.)
+      #
+      # TWO VOCABULARIES, ONE FILE: `most_valuable` names operations with HYPHENS
+      # (`issue-validation`) while the telemetry keys use UNDERSCORES (`issue_validation`).
+      # That is instance 4's own shape, still live, and it is why the key must be normalised.
+      f=.nexus/active/states/system-state.md
+      [ -f "$f" ] || { echo "ESCALATED: candidates 0 (named operations) - system-state unreadable"; exit 2; }
+      mv=$(grep -oE 'most_valuable: \[[^]]*\]' "$f" | head -1 | tr -d '"[]' | sed 's/most_valuable: //')
+      cand=$(echo "$mv" | tr ',' '\n' | grep -c '[a-z]')
+      [ "$cand" -eq 0 ] && { echo "ESCALATED: candidates 0 (named operations) - most_valuable did not parse"; exit 2; }
+      bound=0; bad=0
+      for op in $(echo "$mv" | tr ',' ' '); do
+        key=$(echo "$op" | tr '-' '_')
+        # Anchor on the single-line component record, not a -A6 window: the key appears 17
+        # times across scores, components and prose, and a window lands on whichever comes
+        # first - which is how the original silently read a neighbouring block.
+        rec=$(grep -oE "^[[:space:]]*${key}:[[:space:]]*\{[^}]*\}" "$f" | head -1)
+        since=$(echo "$rec" | grep -oE 'sprints_since: [0-9]+' | grep -oE '[0-9]+' | head -1)
+        [ -n "$since" ] || { echo "  $op named most_valuable but its telemetry record did not parse [UNRESOLVED]"; continue; }
+        bound=$((bound+1))
+        # 8 sprints is the maintenance cycle length: an operation named MOST VALUABLE that has
+        # not run for a full cycle is the instance-4 contradiction - a hand-curated ranking
+        # disagreeing with the telemetry sitting in the same file.
+        [ "$since" -ge 8 ] && { bad=$((bad+1)); echo "  $op named most_valuable but has not run for $since sprints"; }
+      done
+      [ "$bound" -lt "$cand" ] && { echo "ESCALATED: bound $bound < candidates $cand (named operations) - telemetry did not parse for $((cand-bound)) of them"; exit 2; }
+      echo "FILLED: $bad findings / $bound bound (named operations) / $cand candidates (named operations)"
+    fixture: |
+      Historical broken state: `backup-optimization` was listed as most_valuable against
+      telemetry reading 12 consecutive skips and zero executions - a hand-curated ranking
+      contradicted three lines above it. Corrected at the Sprint 109 cycle to
+      ["issue-validation","pattern-maintenance"].
+      THE FIXTURE IS STILL LIVE AND STILL IN THE FILE: `backup_optimization` records
+      `sprints_since: 30, status: "🔴 Overdue"`. Put it back into `most_valuable` and this
+      edge fires immediately - which is the fires-on-broken arm, executable today without
+      reconstructing anything from git.
+      Executed Conv 7 after the rewrite: `FILLED: 0 findings / 2 bound / 2 candidates`
+      (issue_validation 0, pattern_maintenance 0 sprints since last run). Sabotage arm:
+      inject backup-optimization -> 1 finding at 30 sprints.
+      ⚠️ The pre-rewrite version of this predicate is itself worth keeping as evidence: it
+      searched for `executions:`, a field the schema does not contain, and reported a clean
+      pair for two conversations. An edge can be fully declared, fixtured and dogfooded and
+      still be checking nothing.
+
+  - id: E-06
+    source: ".nexus/active/registries/issues-registry.yaml (`target_sprint` — the source of truth)"
+    derived: "sprint-queue / sprint-state closure narrative"
+    direction: source-to-copy
+    runs_at: boot
+    disposition: eliminable
+    first_seen_stale: null
+    elimination_note: |
+      ELIMINABLE. The registry is the declared source of truth; the narrative should POINT at
+      it, not restate it. Instance 8 ran the drift the other way — closure moved three issues
+      to TBD in the narrative while the registry, nominally authoritative, still read 109.
+      A pointer removes the edge entirely. Not taken here: narrative rewrite is out of this
+      issue's scope and belongs to whoever next touches sprint-queue.
+    predicate: |
+      # FRESH-TREE GUARD - contract and worked examples in this file's header (PAT-113).
+      # First executable lines, before any comparison: this edge terminates on BOTH paths and a
+      # guard placed in an escalation branch would not cover the other one.
+      _lc=$(grep -m1 -oE '^_project_lifecycle: [a-z-]+' \n              .nexus/active/states/sprint-state.md 2>/dev/null | awk '{print $2}')
+      case "${_lc:-}" in not-defined|defining)
+        echo "SKIP (justified): sprint-queue states no narrative count yet - project not yet set up"; exit 0 ;;
+      esac
+      # The first draft had a DEAD CONTROL ARM: `bad` was initialised to 0, the loop body
+      # ended in a no-op `|| true`, and the verdict was `0 findings` regardless of corpus
+      # state. That is ISS-248 IE-1 verbatim — "a fixture's control arm can be dead; show it
+      # non-zero before trusting it" — reproduced inside the issue that inherits the lesson.
+      # (Found by dogfooding, Conv 6.)
+      # The queue states its targets as PROSE, so the machine-checkable claim is the COUNT it
+      # asserts about itself — exactly instance 8's shape: a narrative count disagreeing with
+      # the registry that is nominally authoritative.
+      r=.nexus/active/registries/issues-registry.yaml
+      q=.nexus/active/states/sprint-queue.md
+      claim=$(grep -oE 'total_issues_scheduled: [0-9]+ +# of [0-9]+ active' "$q" | head -1)
+      [ -z "$claim" ] && { echo "ESCALATED: candidates 0 (queue count claims) — the narrative stopped stating a count this predicate can check"; exit 2; }
+      q_sched=$(echo "$claim" | grep -oE 'scheduled: [0-9]+' | grep -oE '[0-9]+')
+      q_active=$(echo "$claim" | grep -oE 'of [0-9]+ active' | grep -oE '[0-9]+')
+      # STATUS-AWARE. The first repaired draft compared the queue's "N active" against every
+      # target_sprint key in the registry — but a Resolved-not-yet-archived issue still holds
+      # one, so the two figures counted different things and it reported a false finding.
+      # That is the SAME category error as E-04's first draft, one level down: a pair whose
+      # halves have different denominators is not a pair. (Found by auditing the instrument
+      # before accepting its reading — PAT-138, Conv 6.)
+      r_active=$(grep -cE '^ISS-[0-9]+\.status: "?Open"?$' "$r")
+      [ "$r_active" -eq 0 ] && { echo "ESCALATED: bound 0 (Open issues) — status field did not parse"; exit 2; }
+      open_ids=$(grep -E '^ISS-[0-9]+\.status: "?Open"?$' "$r" | sed 's/\..*//')
+      r_tbd=0
+      for id in $open_ids; do
+        grep -qE "^${id}\.target_sprint: \"?TBD\"?$" "$r" && r_tbd=$((r_tbd+1))
+      done
+      q_tbd=$(( q_active - q_sched ))   # derived, not word-parsed: the queue's own arithmetic
+      # BOUND IS EARNED PER CLAIM (VC-2 @ 2.9.0). Two claims are checkable here — the active
+      # count and the TBD count — and each is bound only if BOTH of its operands parsed to a
+      # number. Through v1.3.0 `bound=2` was a constant printed as both figures, so a claim
+      # whose operand failed to parse was silently compared as an empty string and the
+      # inequality could never report it.
+      cand=2; bound=0; n=0
+      case "$q_active$r_active" in *[!0-9]*|'') ;; *) bound=$((bound+1));
+        [ "$q_active" -ne "$r_active" ] && { n=$((n+1)); echo "  queue claims $q_active active; registry holds $r_active Open"; } ;;
+      esac
+      case "$q_tbd$r_tbd" in *[!0-9]*|'') ;; *) bound=$((bound+1));
+        [ "$q_tbd" -ne "$r_tbd" ] && { n=$((n+1)); echo "  queue narrative implies $q_tbd at TBD; registry holds $r_tbd Open issues at TBD"; } ;;
+      esac
+      [ "$bound" -lt "$cand" ] && { echo "ESCALATED: bound $bound < candidates $cand (count claims) — a claim's operands did not parse to numbers"; exit 2; }
+      echo "FILLED: $n findings / $bound bound (count claims) / $cand candidates (count claims)"
+    fixture: |
+      Historical broken state: Sprint 108 closure moved ISS-231/234/236 to TBD in the queue
+      narrative and sprint-state; the registry still read 109. Both sides now read "TBD"
+      (registry :160/:180/:200, verified Conv 6). Fires-on-broken proof: set one registry
+      key back to 109 and confirm the edge reports a finding rather than a clean pass.
+
+  - id: E-07
+    source: ".claude/skills/nexus-start/SKILL.md STEP 4 source-set (this manifest, after Phase 3)"
+    derived: ".claude/skills/nexus-checkpoint/SKILL.md STEP 4 path-set"
+    direction: source-to-copy
+    runs_at: boot
+    disposition: eliminable
+    first_seen_stale: null
+    elimination_note: |
+      ELIMINABLE AND ELIMINATED — the only edge in this file where the elimination branch is
+      actually taken (ISS-240 Phase 3.7). checkpoint STEP 4 hardcoded `^\.nexus/active/[^/]+\.md$`
+      with the comment "the core files changelog-scan tracks", a hand-copied twin of boot
+      STEP 4's source-set; :345 states the pairing outright — "boot warns, checkpoint
+      self-heals." Two copies of one source-set, in the two steps that read it.
+      This is instance class #2 SITTING INSIDE the mechanism built to detect it, and it was
+      found by this issue's own mandated Touchpoint Census at the Build gate, not by design.
+      Once the manifest exists the second copy has no reason to exist (PAT-130 source-fix
+      over symptom-machinery; PAT-109 scrub-references). Post-3.7 the predicate below is a
+      REGRESSION GUARD against the copy being reintroduced.
+    predicate: |
+      # CLASSIFY, DO NOT COUNT. Phase 3.7 eliminated the second copy, and the marker phrase
+      # SURVIVES inside a blockquote that documents the removal. The first draft of this
+      # predicate counted bare occurrences and so still reported a finding against a file
+      # that had been correctly repaired — making its own exit criterion ("reports 0 after
+      # 3.7") satisfiable ONLY by deleting a correct explanation. That is PAT-142's too-broad
+      # direction, live, on the edge this issue calls direction 2's only live fixture.
+      # (Found by dogfooding the repair, Conv 7. Same shape as E-02's homonym arm.)
+      # The signal for an ACTIVE second copy is a DECLARATION SITE: the path regex literal,
+      # or a markdown list item. Historical prose is classified, never counted.
+      c=.claude/skills/nexus-checkpoint/SKILL.md
+      [ -f "$c" ] || { echo "ESCALATED: candidates 0 (source-set declarations) — consumer file unreadable"; exit 2; }
+      cand=1
+      # BOUND IS EARNED, NEVER ASSERTED (ISS-240 Evaluation, Sprint 111 Conv 8).
+      # Through v1.3.0 this predicate set `cand=1` as a literal and printed that same
+      # literal as `bound`, so the verdict `FILLED: 0 findings / 1 bound / 1 candidates`
+      # was emitted IDENTICALLY on the live tree, on a consumer whose marker phrase had
+      # been renamed, and on a COMPLETELY EMPTY consumer file. The only guard was
+      # `[ -f ]`, and an empty file exists. That is instance 5's shape — no data at all,
+      # reported as clean, indistinguishable from a real clean run — living inside the
+      # manifest built to detect instance 5. It is the FOURTH occurrence of that class in
+      # this artifact (after E-02 fail-open, E-11 vacuous 0/0/0, E-05's nonexistent
+      # field), and the one the three isolated reviewers did not reach: E-07 is a
+      # regression guard for an already-eliminated copy, so it is the edge nobody re-reads.
+      # The consumption proof is POSITIVE EVIDENCE OF DELEGATION: locate STEP 4's
+      # reactive-scan region, and confirm it still cites the manifest edge it was
+      # eliminated in favour of. A region that stops citing E-12 has gone back to
+      # restating the set in its own words — which no marker-phrase grep would catch.
+      region=$(awk '/\*\*Reactive freshness scan\*\*/{f=1} /Stale-edge escalation intake/{f=0} f' "$c")
+      [ -n "$region" ] || { echo "ESCALATED: bound 0 (source-set declarations) — /nexus-checkpoint STEP 4's reactive-scan region did not resolve in $c. A predicate that cannot locate its subject has not certified it clean."; exit 2; }
+      echo "$region" | grep -q 'E-12' || { echo "ESCALATED: bound 0 (source-set declarations) — the region resolved but no longer cites edge E-12, the manifest row this copy was eliminated in favour of. Delegation cannot be confirmed, so the absence of a marker phrase proves nothing."; exit 2; }
+      bound=1
+      active=0; hom=0
+      hits=$(grep -nE 'the core files changelog-scan tracks|\^\\\.nexus/active/\[' "$c")
+      if [ -n "$hits" ]; then
+        while IFS= read -r line; do
+          ln=${line%%:*}; text=${line#*:}
+          if echo "$text" | grep -q '\^\\\.nexus/active/\['; then
+            active=$((active+1)); echo "  :$ln [FINDING] path regex literal present outside the manifest"
+          else
+            case "$text" in
+              '>'*)  hom=$((hom+1));       echo "  :$ln [LIVE HOMONYM] blockquote documenting the removal" ;;
+              '- '*) active=$((active+1)); echo "  :$ln [FINDING] active list-item declaration of the source set" ;;
+              *)     hom=$((hom+1));       echo "  :$ln [LIVE HOMONYM] prose mention" ;;
+            esac
+          fi
+        done <<HITS
+      $hits
+      HITS
+      fi
+      echo "FILLED: $active findings / $bound bound (source-set declarations) / $cand candidates (source-set declarations)"
+      echo "  every hit fixed or classified: $active ACTIVE + $hom LIVE HOMONYM"
+    fixture: |
+      LIVE at declaration, Conv 6 Sprint 111 — and this direction's ONLY live fixture, since
+      instances 3, 4 and 8 had all closed before Build. ELIMINATED at Conv 7 by Phase 3.7;
+      the predicate is now a REGRESSION GUARD against the copy being reintroduced.
+      Four arms, all EXECUTED against real disk state at Conv 7, never asserted:
+        1. post-fix live tree          -> 0 findings / 1 bound / 1 candidates, 1 LIVE HOMONYM
+        2. pre-fix, from git HEAD      -> 1 finding  (:333, the path regex literal)
+        3. sabotage: bullet reinstated -> 1 finding  (detects the reintroduction it guards)
+        4. sabotage: consumer missing  -> ESCALATED, exit 2
+      Arm 3 is the one that matters: arms 1 and 2 only prove the edit happened, and a
+      regression guard that cannot detect the regression is a dead control arm
+      (ISS-248 IE-1). Arm 1 also proves the homonym classification — without it this
+      predicate reports a finding against the very repair that fixed it.
+  - id: E-08
+    source: ".nexus/.freshness-checked written format (/nexus-start STEP 4)"
+    derived: ".nexus/tests/scenarios/boot.md format assertion"
+    direction: source-to-copy
+    runs_at: boot
+    disposition: must-check
+    first_seen_stale: null
+    predicate: |
+      # Enumerate writers/readers FROM SOURCE, not from documentation — the documentation is
+      # the thing most likely to be stale, and it is what motivated this check (PAT-137).
+      # That enumeration found FOUR live consumers of this format, not the one the plan named:
+      # tests/scenarios/boot.md, NEXUS-Architecture.md (x2) and CLAUDE.md's Routing-Map hints
+      # comment. All four are patched as of Conv 7 (ISS-240 Phase 3.8).
+      # THREE ASSERTION ARMS, one unit: "does declaration X agree with declaration Y".
+      #   A  line-1 key set: writer (nexus-start) vs fixture (tests/boot.md)
+      #   B  ledger line shape `stale: E-NN=SSS` declared on both sides
+      #   C  ledger-vs-seed PRECEDENCE: a manifest `first_seen_stale` that disagrees with a
+      #      POPULATED ledger entry is a finding. Without arm C the seed is a second home for
+      #      one value, which is this manifest's own defect class (ISS-240 Conv 7 gate).
+      t=.nexus/tests/scenarios/boot.md
+      sk=.claude/skills/nexus-start/SKILL.md
+      f=.nexus/.freshness-checked
+      m=.nexus/active/derivations.yaml
+      [ -f "$t" ] || { echo "ESCALATED: test scenario not readable"; exit 2; }
+      [ -f "$sk" ] || { echo "ESCALATED: writer skill not readable"; exit 2; }
+      # The first draft compared the two sides for NON-EMPTINESS and never compared their
+      # values: `[ -n "$actual" ] && [ -n "$asserted" ]`. Both existing is not both agreeing.
+      # (Found by dogfooding, Conv 6.) Compare the KEY SET each side names.
+      w=$(grep -ohE 'sprint=[^ `|"]+ +conv=[^ `|"]+' "$sk" | head -1 | grep -oE '[a-z_]+=' | tr -d '=' | sort -u | tr '\n' ',')
+      a=$(grep -ohE 'sprint=[^ `|"]+ +conv=[^ `|"]+' "$t"  | head -1 | grep -oE '[a-z_]+=' | tr -d '=' | sort -u | tr '\n' ',')
+      if [ -z "$w" ] || [ -z "$a" ]; then
+        echo "ESCALATED: bound 0 (key sets) — could not extract a key set from one side"; exit 2
+      fi
+      cand=2; bound=2; n=0
+      [ "$w" != "$a" ] && { n=$((n+1)); echo "  [A] writer keys [$w] != asserted keys [$a]"; }
+      wl=$(grep -c 'stale: E-NN=SSS' "$sk"); al=$(grep -c 'stale: E-NN=SSS' "$t")
+      if [ "$wl" -eq 0 ] || [ "$al" -eq 0 ]; then
+        n=$((n+1)); echo "  [B] ledger line shape declared by writer=$wl fixture=$al — both must declare it"
+      fi
+      # Arm C. An EMPTY ledger is a legitimate empty set, not a wrong path — nothing is stale,
+      # or no boot has swept yet. Arms A and B carry the candidates>0 floor, so C contributing
+      # zero candidates cannot produce a vacuous pass for the edge (cf. IE-3).
+      if [ -f "$f" ] && [ -f "$m" ]; then
+        while IFS= read -r L; do
+          eid=$(echo "$L" | grep -oE 'E-[0-9]+'); led=$(echo "$L" | grep -oE '=[0-9]+$' | tr -d '=')
+          [ -n "$eid" ] && [ -n "$led" ] || continue
+          cand=$((cand+1)); bound=$((bound+1))
+          seed=$(awk -v id="- id: $eid" '$0 ~ id{f=1} f&&/first_seen_stale:/{print $2; exit}' "$m")
+          case "$seed" in ''|null) continue ;; esac
+          [ "$seed" != "$led" ] && { n=$((n+1)); echo "  [C] $eid: manifest seed $seed disagrees with populated ledger entry $led — the ledger is authoritative; the seed is read once and never again"; }
+        done <<LEDGER
+      $(grep '^stale: E-' "$f" 2>/dev/null)
+      LEDGER
+      fi
+      echo "FILLED: $n findings / $bound bound (agreement assertions) / $cand candidates (agreement assertions)"
+      echo "  live consumers of this format (from source): $(grep -rl 'sprint=NNN conv=N\|sprint={current _sprint} conv=' CLAUDE.md .claude/skills .nexus/active .nexus/tests 2>/dev/null | tr '\n' ' ')"
+    fixture: |
+      Went live the moment Phase 3.4 added the ledger to this file: boot.md :27 fixed full
+      content as `sprint={_sprint} conv={conversation_number}` and :47 carried a PASS row on
+      that literal. Left unpatched, this issue would have shipped instance #10 in the same
+      commit that shipped the mechanism against instance #10 — self-inflicted, and caught by
+      this issue's own census.
+      THE CENSUS UNDER-COUNTED: the plan named ONE consumer and grep-from-source found FOUR
+      (tests/boot.md, NEXUS-Architecture.md :164 and :723, CLAUDE.md :835). The two extra
+      files were already in scope for other steps, so the finding cost step content, not
+      scope — but a fix limited to the named consumer would have left the architecture map
+      and the root spec both asserting a format that no longer existed (Conv 7).
+      Arms executed Conv 7:
+        A  key sets agree                                    -> 0 findings
+        B  both sides declare `stale: E-NN=SSS`              -> 0 findings
+        C  ledger vs manifest seed, desynced pair sabotage   -> 1 finding, message names both
+        :47 is NOT patched — it is a Sprint 096 run RESULT, not a live assertion. Rewriting a
+        historical run record to match a new format would falsify the audit trail; it is
+        classified correct-as-recorded and the re-baseline note above it says so.
+      Fires-on-broken proof: change the written format without touching boot.md and confirm a
+      finding; also confirm STEP 4's documented `conv = 0` special case still parses.
+
+  - id: E-09
+    source: ".claude/skills/nexus-guide-creator/SKILL.md STEP 5 (writes `status: active`)"
+    derived: ".claude/skills/nexus-staleness-checker/SKILL.md STEP 1 filter vocabulary"
+    direction: producer-to-consumer
+    runs_at: nexus-registry-cleanup
+    disposition: must-check
+    first_seen_stale: null
+    predicate: |
+      de="${DOCREG:-.nexus/active/registries/documentation-registry.yaml}"
+      sc="${CONSUMER:-.claude/skills/nexus-staleness-checker/SKILL.md}"
+      [ -f "$de" ] && [ -f "$sc" ] || { echo "ESCALATED: candidates 0 (registry rows with a status field) - registry or consumer unreadable"; exit 2; }
+
+      # CANDIDATES = registry rows the consumer is supposed to examine.
+      # COMMENT LINES ARE NOT ROWS. The registry carries a comment reading
+      # "were `status: planned` since Sprint 061", and counting it made  look like a
+      # live value the filter failed to span - a false near-miss produced by the registry
+      # documenting its own history. Strip comments from both the count and the value set.
+      cand=$(grep -vE '^[[:space:]]*#' "$de" | grep -cE 'status: "?[a-z]+')
+      [ "$cand" -eq 0 ] && { echo "ESCALATED: candidates 0 (registry rows with a status field)"; exit 2; }
+
+      # The consumer's FILTER vocabulary, taken ONLY from lines that instruct a scan. NOT a
+      # whole-file grep: staleness-checker DOCUMENTS the historical `created` in an Enum note, and
+      # a whole-file union silently widens the vocabulary until it spans everything - a false
+      # negative wearing a passing verdict. Same live-homonym trap E-07's first repair fell into.
+      filt=$(grep -hE '(^|[^a-zA-Z])Scan .*registry' "$sc" | grep -ohE 'status: `?"?[a-z]+' | grep -oE '[a-z]+$' | sort -u)
+      [ -n "$filt" ] || { echo "ESCALATED: bound 0 (matched rows) - no scan instruction named a status value; the filter could not be LOCATED, which is not the same as a filter that matches nothing"; exit 2; }
+
+      # BOUND = rows the consumer's filter would actually match. THIS is the consumption proof.
+      # The `$` anchor sat after the OPENING quote only, so `status: "active"` matched the
+      # candidate regex but could never match here - bound would collapse to 0 and the edge
+      # would raise a false instance-5 alarm caused purely by quoting. (Independent review.)
+      bound=0
+      for v in $filt; do
+        bound=$(( bound + $(grep -vE '^[[:space:]]*#' "$de" | grep -cE "status: \"?$v\"?[[:space:]]*\$") ))
+      done
+
+      # The instance-5 failure mode is a filter that matches NOTHING while the registry is full:
+      # staleness-checker filtered `created` against a registry holding only active/planned and
+      # matched 0 of 21 on every run for its entire life, producing a clean-looking null. VC-2's
+      # own inequality catches it once the pair is measured against the right populations.
+      # ONE DENOMINATOR. Values present but outside the filter are CLASSIFIED as
+      # excluded-by-design (staleness-checker skips `planned` because planned guides have no
+      # content to compare) - so they are SUBTRACTED from candidates rather than counted as
+      # findings. Counting them as findings makes the check satisfiable only by widening a
+      # filter that is already correct (PAT-142, too-broad); leaving them IN candidates while
+      # bound can never reach them ships a permanent `bound < candidates` FILLED, which the
+      # manifest header rules must ESCALATE. The first version did the latter and reported
+      # `16 bound / 17 candidates` as a pass FOUR TIMES without anyone noticing, because the
+      # eye goes to `0 findings`. (Independent review, Conv 7.)
+      present=$(grep -vE '^[[:space:]]*#' "$de" | grep -ohE 'status: "?[a-z]+' | grep -oE '[a-z]+$' | sort -u)
+      # EXCLUSIONS MUST BE DECLARED, NOT INFERRED. The first version subtracted ANY value
+      # outside the filter from candidates as "excluded by design" - so a producer-side
+      # RENAME was absorbed as a deliberate omission and reported clean. Caught by running
+      # the fires-on-broken arm (Conv 7): renaming one status produced `0 findings` on a
+      # genuinely broken registry. An unknown value is a FINDING; only a value on the
+      # declared allow-list is an exclusion. Same shape as E-04's SEEDS/MENUS allow-list.
+      # Declared exclusion: staleness-checker skips `planned` because planned guides have no
+      # content or references to compare. That is the ONLY legitimate omission.
+      allow="planned"
+      excluded=0; unknown=0
+      for v in $present; do
+        echo "$filt" | grep -qx "$v" && continue
+        rows=$(grep -vE '^[[:space:]]*#' "$de" | grep -cE "status: \"?$v\"?[[:space:]]*$")
+        if echo "$allow" | tr ' ' '\n' | grep -qx "$v"; then
+          echo "  status '$v' outside the filter [CLASSIFIED - declared exclusion, no content to compare]"
+          excluded=$(( excluded + rows ))
+        else
+          unknown=$((unknown+1))
+          echo "  status '$v' is in the registry, NOT in the consumer's filter, and NOT a declared exclusion [FINDING] - $rows guide(s) invisible to the consumer"
+        fi
+      done
+      inscope=$(( cand - excluded ))
+      if [ "$bound" -eq 0 ]; then
+        echo "ESCALATED: bound 0 < candidates $inscope (in-scope registry rows) - the consumer's filter [$(echo $filt | tr ' ' ',')] matches NO row. A run under this filter produces an empty report indistinguishable from a clean one."
+        exit 2
+      fi
+      if [ "$bound" -lt "$inscope" ]; then
+        echo "ESCALATED: bound $bound < candidates $inscope (in-scope registry rows) - the filter reaches only part of the population it is supposed to span. A near-miss is instance 5 wearing a passing verdict."
+        exit 2
+      fi
+      echo "FILLED: $unknown findings / $bound bound (in-scope registry rows) / $inscope candidates (in-scope registry rows)"
+      echo "  consumer filter: [$(echo $filt | tr ' ' ',')]  registry values: [$(echo $present | tr ' ' ',')]  declared-exclusions: $excluded of $cand total rows"
+      exit 0
+    fixture: |
+      THE ANCHOR CASE - instance 5, the worst of the nine and the one the acceptance argument
+      rests on. staleness-checker STEP 1 filtered on a DIFFERENT enum than guide-creator wrote,
+      and matched 0 of 21 guides on EVERY RUN FOR ITS ENTIRE LIFE. It produced no data at all,
+      which read as "documentation is fine", while /nexus-registry-cleanup scored that registry
+      100 throughout - every field present, every enum value in the allowed set, every file on
+      disk. Structure was flawless; the registry and its consumer simply did not share a
+      vocabulary and nothing compared them.
+      FIVE ARMS, ALL EXECUTED at Conv 7 Phase 4.1:
+        1. post-fix live tree      -> FILLED 0 findings / 16 bound / 17 candidates,
+                                      `planned` CLASSIFIED as a deliberate exclusion
+        2. PRE-FIX from git b3ecaaf7 -> ESCALATED: bound 0 < candidates 17, filter [created]
+                                      matches NO row.  <-- SC-03's mandated fires-on-broken proof
+        3. filter not locatable     -> ESCALATED bound 0, with a DIFFERENT message: a filter that
+                                      cannot be FOUND is not a filter that matches nothing
+        4. empty registry           -> ESCALATED candidates 0
+        5. registry values renamed so a CORRECT filter matches nothing -> ESCALATED
+      Arm 5 matters as much as arm 2: it proves the check catches drift from the REGISTRY side,
+      not only the consumer side. Arm 1's classification arm matters too - the first draft of
+      this predicate counted `planned` as a finding, which would have made the check satisfiable
+      only by widening a filter that was already correct (PAT-142's too-broad direction, caught
+      by running arm 1 before shipping).
+
+  - id: E-10
+    source: ".nexus/templates/pattern-specification.md #### Effectiveness Formula"
+    derived: ".nexus/active/registries/patterns-registry.yaml stored `effectiveness` values"
+    direction: producer-to-consumer
+    runs_at: nexus-registry-cleanup
+    disposition: eliminable
+    first_seen_stale: null
+    elimination_note: |
+      ELIMINABLE but KEPT AND CHECKED — PAT-130's challenge answered rather than deferred.
+      The stored value is fully derivable from successes/failures, so the field could be
+      dropped and computed at read. Not taken: /nexus-match-pattern STEP 2 scores on it and
+      STEP 0's filter projects it, so elimination moves a computation into a boot-adjacent
+      hot path for no correctness gain. Recorded as a decision, not an oversight.
+    predicate: |
+      spec="${SPEC:-.nexus/templates/pattern-specification.md}"
+      reg="${PATREG:-.nexus/active/registries/patterns-registry.yaml}"
+      [ -f "$spec" ] || { echo "ESCALATED: bound 0 (formula) - spec unreadable"; exit 2; }
+      [ -f "$reg" ]  || { echo "ESCALATED: candidates 0 (registry rows) - registry unreadable"; exit 2; }
+
+      # PARSE THE FORMULA FROM THE SPEC AT RUN TIME. NEVER RESTATE IT.
+      # At ISS-240 Phase 0 a recompute against a formula that had been ASSUMED - Laplace
+      # (s+1)/(s+f+2) - reported 31 OF 56 PATTERNS DRIFTING. Against the formula the spec
+      # actually states, drift was ZERO. A confident, well-formatted, entirely false finding set
+      # from an unaudited instrument, and it is THIS EDGE'S OWN failure mode (IE-1, PAT-138).
+      # All three components must be present; a partial parse must not fall back to memory.
+      c1=$(grep -c 'effectiveness = 0\.50 + ((success_rate - 0\.50)' "$spec")
+      c2=$(grep -c 'success_rate = successes / (successes + failures)' "$spec")
+      c3=$(grep -c 'volume_confidence = min(1\.0, (successes + failures) / 10)' "$spec")
+      if [ "$c1" -eq 0 ] || [ "$c2" -eq 0 ] || [ "$c3" -eq 0 ]; then
+        echo "ESCALATED: bound 0 (formula) - the stated formula did not parse from $spec (effectiveness=$c1 success_rate=$c2 volume_confidence=$c3). Recomputing against a remembered formula is what produced 31 false findings at Conv 6."
+        exit 2
+      fi
+
+      cand=$(grep -cE '^PAT-[0-9]+\.effectiveness:' "$reg")
+      [ "$cand" -eq 0 ] && { echo "ESCALATED: candidates 0 (registry rows with an effectiveness field)"; exit 2; }
+
+      awk -v cand="$cand" -v force="${FORCE_FORMULA:-}" '
+        /^PAT-[0-9]+\.successes:/    { split($1,a,"."); s[a[1]]=$2 }
+        /^PAT-[0-9]+\.failures:/     { split($1,a,"."); f[a[1]]=$2 }
+        /^PAT-[0-9]+\.effectiveness:/{ split($1,a,"."); e[a[1]]=$2; seen[a[1]]=1 }
+        END {
+          bound=0; n=0
+          for (p in seen) {
+            if (!(p in s) || !(p in f)) continue      # candidate, not bound
+            bound++
+            tot = s[p] + f[p]
+            if (force == "laplace") { want = (s[p]+1)/(tot+2) }        # instrument-audit arm
+            else {
+              rate = (tot == 0) ? 0.50 : s[p]/tot
+              conf = (tot/10 < 1.0) ? tot/10 : 1.0
+              want  = 0.50 + ((rate - 0.50) * conf)
+            }
+            want = int(want*100 + 0.5)/100
+            d = e[p] - want; if (d < 0) d = -d
+            if (d > 0.005) { n++; printf "  %s stored %.2f, formula gives %.2f (s=%d f=%d)\n", p, e[p], want, s[p], f[p] }
+          }
+          if (bound < cand) {
+            printf "ESCALATED: bound %d < candidates %d (registry rows) - %d rows carry an effectiveness value with no successes/failures pair to recompute from\n", bound, cand, cand-bound
+            exit 2
+          }
+          printf "FILLED: %d findings / %d bound (patterns recomputed) / %d candidates (registry rows with an effectiveness field)\n", n, bound, cand
+          printf "  formula PARSED from the spec, not restated%s\n", (force != "" ? " [INSTRUMENT-AUDIT ARM: deliberately wrong formula]" : "")
+        }
+      ' "$reg"
+    fixture: |
+      Executed Conv 7 Phase 4.2 against the live corpus, in TWO INDEPENDENT IMPLEMENTATIONS
+      (Python and shell+awk) that agree exactly - the agreement is itself an instrument check:
+        0 findings / 56 bound (patterns recomputed) / 56 candidates (rows with an effectiveness field)
+      Historical broken state: values drifted from the formula IN BOTH DIRECTIONS - PAT-084 held
+      1.00 against a formula 0.70; PAT-104 held 0.55 at zero applications.
+      FOUR ARMS, ALL EXECUTED:
+        1. live corpus, formula PARSED from the spec -> 0 findings
+        2. INSTRUMENT AUDIT (PAT-138): deliberately wrong formula (Laplace) -> 31 findings,
+           REPRODUCING IE-1'S RECORDED DELTA EXACTLY. 31 vs 0 from the same corpus is the whole
+           argument for parsing the formula rather than remembering it
+        3. one stored value perturbed by 0.05 -> reported, named, with s/f shown
+        4. formula REWORDED in the spec -> ESCALATED bound 0, no fallback to a remembered formula
+      A FIFTH DEFECT WAS FOUND BY EXECUTION AND NOT BY READING: the awk rewrite used `exp` as a
+      variable, which is an awk BUILTIN, so the predicate emitted nothing and exited 1. Under
+      boot STEP 4 sub-step B that is the "predicate failed" arm - which is the non-fatal design
+      working, but it would have been invisible to review.
+
+  - id: E-11
+    source: ".nexus/archived/patterns/ (the retired-id set)"
+    derived: "patterns-registry `synergies` / `conflicts` / `alternatives` fields"
+    direction: producer-to-consumer
+    runs_at: nexus-create-pattern
+    disposition: must-check
+    first_seen_stale: null
+    predicate: |
+      # STEP 6B PRE-WRITE GATE. Runs on the CANDIDATE entry before it reaches the registry.
+      # Boot-time detection is too late: by then the dead reference is already in a machine-read
+      # field. ISS-227 purged every retired-pattern reference and closed after an adversarial sweep
+      # of 15 archived ids; PAT-139, authored TWO SPRINTS LATER, put retired PAT-123 straight back
+      # into `synergies`. The purge was correct - nothing stopped the next author from undoing it.
+      entry="${ENTRY:?ENTRY=path to the candidate registry entry}"
+      arch_dir="${ARCHDIR:-.nexus/archived/patterns}"
+      [ -f "$entry" ] || { echo "ESCALATED: candidates 0 (relationship-field references) - candidate entry unreadable"; exit 2; }
+
+      arch=$(ls "$arch_dir" 2>/dev/null | grep -oE 'PAT-[0-9]+' | sort -u)
+      n_arch=$(echo "$arch" | grep -c 'PAT-')
+      [ "$n_arch" -eq 0 ] && { echo "ESCALATED: bound 0 (archived ids) - the archived-pattern set did not resolve at $arch_dir; a gate that cannot see the retired set cannot certify the write"; exit 2; }
+
+      lines=$(grep -cE '\.(synergies|conflicts|alternatives):' "$entry")
+      [ "$lines" -eq 0 ] && { echo "SKIP (justified): the candidate entry declares no synergies/conflicts/alternatives field - nothing to validate against the retired set"; exit 0; }
+
+      cand=$(grep -ohE '\.(synergies|conflicts|alternatives):.*' "$entry" | grep -oE 'PAT-[0-9]+' | wc -l)
+      # EMPTY FIELDS TERMINATE **SKIP**, NEVER `FILLED: 0/0/0`. `synergies: []` is the DEFAULT
+      # shape of a new pattern, so the first version emitted the literal vacuous verdict on the
+      # gate's most-travelled path - the exact string create-pattern STEP 6B's own prose says
+      # "would be the vacuous pass this framework's VC-2 contract exists to catch".
+      # (Independent review, Conv 7.)
+      [ "$cand" -eq 0 ] && { echo "SKIP (justified): relationship fields are present but name no pattern ids - there is nothing to validate against the retired set"; exit 0; }
+
+      bound=0; n=0
+      for id in $(grep -ohE '\.(synergies|conflicts|alternatives):.*' "$entry" | grep -oE 'PAT-[0-9]+'); do
+        bound=$((bound+1))
+        if echo "$arch" | grep -qx "$id"; then
+          n=$((n+1))
+          field=$(grep -hE "\.(synergies|conflicts|alternatives):.*$id" "$entry" | grep -oE '(synergies|conflicts|alternatives)' | head -1)
+          echo "  BLOCKED: $id is ARCHIVED and is named in \`$field\` - a retired id in a machine-read field is a dead pointer the next reader will follow"
+        fi
+      done
+      if [ "$n" -gt 0 ]; then
+        echo "ESCALATED: $n findings / $bound bound (relationship-field references) / $cand candidates (relationship-field references), against $n_arch archived ids. REGISTRY WRITE BLOCKED - remove or replace the retired id, then re-run STEP 6B."
+        exit 2
+      fi
+      echo "FILLED: 0 findings / $bound bound (relationship-field references) / $cand candidates (relationship-field references)"
+      echo "  validated against $n_arch archived ids"
+      exit 0
+    fixture: |
+      Historical broken state: ISS-227 (Sprint 106) purged all dead retired-pattern references
+      and closed after an adversarial sweep of 15 archived ids. PAT-139, authored TWO SPRINTS
+      LATER, put retired PAT-123 straight back into a machine-read `synergies` field. The purge
+      was correct; nothing stopped the next author from undoing it.
+      FIVE ARMS, ALL EXECUTED at Conv 7 Phase 4.3:
+        1. synthetic entry naming archived PAT-123 -> ESCALATED, REGISTRY WRITE BLOCKED, the
+           offending id AND its field named.  <-- SC-04's mandated fires-on-broken proof
+        2. clean candidate (live ids only)         -> FILLED 0 findings / 2 bound / 2 candidates
+        3. entry declaring none of the three fields-> SKIP (justified), NOT a vacuous 0/0/0 FILLED
+        4. archived directory unreachable          -> ESCALATED bound 0: a gate that cannot see
+           the retired set must not pass by default
+        5. PAT-139's OWN live registry entry       -> clean; it now reads ["PAT-125","PAT-098"]
+      Arm 5 is the honest note: the historical instance has since been repaired, so this gate
+      ships as a REGRESSION GUARD rather than a live fix. Arm 3 is the one that would have been
+      skipped by an author trusting the happy path - an absent field silently reported as a
+      passing check is the vacuous pass VC-2 exists to catch.
+
+  - id: E-14
+    source: ".nexus/active/states/project-state.md [PROJECT_DEFINITION]"
+    derived: ".nexus/active/states/sprint-state.md [PROJECT_BRIEF]"
+    direction: source-to-copy
+    runs_at: boot
+    disposition: eliminable
+    first_seen_stale: null
+    elimination_note: |
+      ELIMINABLE. `[PROJECT_BRIEF]` is a verbatim copy that /nexus-organize-sprint STEP 4C
+      carries forward at every sprint creation; the sprint-state could point at
+      project-state instead of restating it. Not taken here: organize-sprint owns the block
+      and rewriting sprint creation is outside this issue's scope. Checked, not eliminated.
+    predicate: |
+      # FRESH-TREE GUARD - contract and worked examples in this file's header (PAT-113).
+      # First executable lines, before any comparison: this edge terminates on BOTH paths and a
+      # guard placed in an escalation branch would not cover the other one.
+      _lc=$(grep -m1 -oE '^_project_lifecycle: [a-z-]+' \n              .nexus/active/states/sprint-state.md 2>/dev/null | awk '{print $2}')
+      case "${_lc:-}" in not-defined|defining)
+        echo "SKIP (justified): both state files hold template placeholders, not project values - project not yet set up"; exit 0 ;;
+      esac
+      # FOUND BY THIS FILE'S OWN NEGATIVE-SPACE PROBE (STEP 4 sub-step C) ON ITS FIRST RUN,
+      # not by the Phase 0 census — which is the entire argument for R1's probe existing.
+      # A hand-written manifest cannot be complete by construction; the probe is what makes
+      # its incompleteness countable instead of invisible.
+      # Compare FIELD BY FIELD, not whole-block: three of the four fields agree, and a
+      # whole-block diff would report one undifferentiated finding that names nothing.
+      ps=.nexus/active/states/project-state.md
+      ss=.nexus/active/states/sprint-state.md
+      [ -f "$ps" ] && [ -f "$ss" ] || { echo "ESCALATED: candidates 0 (state files) — a state file is unreadable"; exit 2; }
+      cand=0; bound=0; n=0
+      for pair in "title:title" "project_type:type" "project_domain:domain" "vision:vision"; do
+        pk=${pair%%:*}; sk=${pair##*:}
+        cand=$((cand+1))
+        pv=$(grep -m1 -E "^\s*${pk}: " "$ps" | sed "s/^[^:]*: //" | tr -d '\"')
+        sv=$(awk '/^\[PROJECT_BRIEF\]/{f=1} /^\[\/PROJECT_BRIEF\]/{f=0} f' "$ss" | grep -m1 -E "^\s*${sk}: " | sed "s/^[^:]*: //" | tr -d '\"')
+        [ -n "$pv" ] && [ -n "$sv" ] || continue
+        bound=$((bound+1))
+        [ "$pv" != "$sv" ] && { n=$((n+1)); echo "  ${pk} -> ${sk}: canonical and copy disagree"; }
+      done
+      [ "$cand" -eq 0 ] && { echo "ESCALATED: candidates 0 (brief fields)"; exit 2; }
+      [ "$bound" -lt "$cand" ] && { echo "ESCALATED: bound $bound < candidates $cand (brief fields) — a field did not parse on one side"; exit 2; }
+      echo "FILLED: $n findings / $bound bound (brief fields) / $cand candidates (brief fields)"
+    fixture: |
+      LIVE at declaration, Conv 7 Sprint 111 — direction 2's SECOND live fixture, and the
+      only edge in this file that the Phase 0 census did not produce.
+      Executed Conv 7: 1 finding / 4 bound / 4 candidates. `title`, `project_type` and
+      `project_domain` agree exactly; `vision` does not. project-state holds an early-sprint
+      framing ("a comprehensive AI-powered development assistant"); sprint-state holds the
+      accurate current one ("an LLM harness framework ... currently a meta-project, at
+      production it will manage diverse project types"). organize-sprint carries the brief
+      forward sprint-to-sprint, so the GOOD version has been propagating between sprint-states
+      for many sprints while never reaching the file that is nominally its source.
+      This is instance class #2 RUNNING BACKWARDS — the mirror of instance 8, where the
+      narrative moved and the registry did not. Here the copy moved and the canonical source
+      did not, which is why no reader ever noticed: the stale side is the one nobody reads
+      during sprint work, and the fresh side is the one everybody reads.
+      DELIBERATELY NOT REPAIRED (D-4, PAT-139): the divergence is this edge's fixture, and
+      which vision is canonical is a project-identity decision, not a mechanical one.
+      Fires-on-broken proof: already firing. The CLEAN arm is provable today — set the two
+      vision strings equal in a scratch copy and confirm 0 findings / 4 bound / 4 candidates.
+
+  - id: E-15
+    source: "issues-registry `status` vocabulary, written by /nexus-close-issue (Resolved|Rejected), /nexus-work-issue (In-Progress), /nexus-decompose-issue (Decomposed)"
+    derived: ".claude/skills/nexus-view-issues/SKILL.md STEP 1 filter (`status IN [Open, In-Progress]`)"
+    direction: producer-to-consumer
+    runs_at: nexus-registry-cleanup
+    disposition: must-check
+    first_seen_stale: null
+    predicate: |
+      # ADDED Conv 7 by the Phase 4/5 independent review, which asked the obvious question the
+      # tier's own universal clause invites: SC-03 says "for EVERY registry field an external
+      # skill filters on", and the shipped table covered documentation-registry and
+      # patterns-registry while ISSUES-REGISTRY - the registry NEXUS reads most - had no row at
+      # all. /nexus-view-issues filters it on every invocation. A universal clause with a
+      # remembered subset behind it is the same defect the tier exists to catch, one level up.
+      r=.nexus/active/registries/issues-registry.yaml
+      c=.claude/skills/nexus-view-issues/SKILL.md
+      [ -f "$r" ] && [ -f "$c" ] || { echo "ESCALATED: candidates 0 (registry rows) - registry or consumer unreadable"; exit 2; }
+      # Comment lines are not rows (E-09's lesson: a registry that documents its own history
+      # makes a commented value look live).
+      cand=$(grep -vE '^[[:space:]]*#' "$r" | grep -cE '^ISS-[0-9]+\.status:')
+      [ "$cand" -eq 0 ] && { echo "ESCALATED: candidates 0 (registry rows with a status field)"; exit 2; }
+      present=$(grep -vE '^[[:space:]]*#' "$r" | grep -ohE '^ISS-[0-9]+\.status: "?[A-Za-z-]+' | grep -oE '[A-Za-z-]+$' | sort -u)
+      # The consumer states its filter in a table row, not a Scan sentence, so anchor on the
+      # bracketed set. Locating the filter and finding it empty are DIFFERENT failures.
+      filt=$(grep -ohE 'status IN \[[^]]*\]' "$c" | head -1 | tr -d '[]' | sed 's/status IN //' | tr ',' '\n' | tr -d ' ' | grep '[A-Za-z]' | sort -u)
+      [ -n "$filt" ] || { echo "ESCALATED: bound 0 (matched rows) - no filter expression found in the consumer; a filter that cannot be LOCATED is not a filter that matches nothing"; exit 2; }
+      bound=0
+      for v in $filt; do
+        bound=$(( bound + $(grep -vE '^[[:space:]]*#' "$r" | grep -cE "^ISS-[0-9]+\.status: \"?$v\"?[[:space:]]*$") ))
+      done
+      # EXCLUSIONS MUST BE DECLARED, NOT INFERRED. The first version subtracted ANY value
+      # outside the filter from candidates as "excluded by design" - so a producer-side
+      # RENAME was absorbed as a deliberate omission and reported clean. Caught by running
+      # the fires-on-broken arm (Conv 7): renaming one status produced `0 findings` on a
+      # genuinely broken registry. An unknown value is a FINDING; only a value on the
+      # declared allow-list is an exclusion. Same shape as E-04's SEEDS/MENUS allow-list.
+      # Declared exclusions: the closed states view-issues deliberately omits.
+      allow="Resolved Rejected Superseded Decomposed"
+      excluded=0; unknown=0
+      for v in $present; do
+        echo "$filt" | grep -qx "$v" && continue
+        rows=$(grep -vE '^[[:space:]]*#' "$r" | grep -cE "^ISS-[0-9]+\.status: \"?$v\"?[[:space:]]*$")
+        if echo "$allow" | tr ' ' '\n' | grep -qx "$v"; then
+          echo "  status '$v' outside the filter [CLASSIFIED - declared closed state, deliberately omitted]"
+          excluded=$(( excluded + rows ))
+        else
+          unknown=$((unknown+1))
+          echo "  status '$v' is in the registry, NOT in the consumer's filter, and NOT a declared exclusion [FINDING] - $rows row(s) invisible to /nexus-view-issues"
+        fi
+      done
+      inscope=$(( cand - excluded ))
+      [ "$bound" -eq 0 ] && { echo "ESCALATED: bound 0 < candidates $inscope (in-scope registry rows) - the consumer's filter [$(echo $filt | tr ' ' ',')] matches NO row. Its list would render empty and read as 'no open issues'."; exit 2; }
+      [ "$bound" -lt "$inscope" ] && { echo "ESCALATED: bound $bound < candidates $inscope (in-scope registry rows) - the filter reaches only part of the population it should span"; exit 2; }
+      echo "FILLED: $unknown findings / $bound bound (in-scope registry rows) / $inscope candidates (in-scope registry rows)"
+      echo "  consumer filter: [$(echo $filt | tr ' ' ',')]  registry values: [$(echo $present | tr ' ' ',')]  declared-exclusions: $excluded of $cand total rows"
+    fixture: |
+      The failure mode is instance 5's on the registry NEXUS reads most: if a producer renamed
+      a status (say `Open` -> `Active`) without updating view-issues, the issue list would
+      render EMPTY on every invocation and read as "no open issues" - a clean-looking null,
+      exactly like staleness-checker matching 0 of 21 guides.
+      Fires-on-broken proof (executable today, no git archaeology): rewrite one registry
+      `status: "Open"` to `status: "Active"` in a scratch copy and confirm bound drops below
+      candidates and the edge ESCALATES.
+      Executed Conv 7 on the live tree at declaration - see the Implementation Log.
+
+  - id: E-12
+    # ⛔ THIS FIELD IS READ BY A CONSUMER, NOT ONLY BY HUMANS — /nexus-checkpoint STEP 4's reactive
+    # freshness scan matches staged paths against it (E-07 was eliminated in its favour). It must
+    # therefore stay in lockstep with the predicate below. At Conv 7 the predicate was widened to
+    # `.yaml` (review finding #6, so the manifest's own drift could be detected) and THIS FIELD WAS
+    # NOT — so a commit touching only `derivations.yaml` would have been counted as drift by the
+    # predicate at the next boot while failing to trigger the scan that fixes it. One value, two
+    # homes, one updated: this sprint's defect class, in the row that declares it.
+    # (Found at the Conv 8 checkpoint, by the intake actually running.)
+    source: ".claude/skills/**/*.md + CLAUDE.md + .nexus/templates/*.md + .claude/agents/*.md + .nexus/active/*.md + .nexus/active/*.yaml"
+    derived: ".nexus/active/registries/changelog-registry.yaml"
+    direction: mtime
+    runs_at: boot
+    disposition: must-check
+    first_seen_stale: null
+    predicate: |
+      # THE CANDIDATE SET MUST SPAN EVERY SET `n` SCANS. The first draft counted candidates
+      # over skills+templates+agents (110) while counting newer files over those PLUS
+      # CLAUDE.md PLUS .nexus/active/*.md (113) — two figures counting different things, so
+      # `findings` could legally exceed `candidates`. Same category error as E-04's first
+      # draft and IE-5, one level down, and it was invisible until E-13's sibling arm printed
+      # `108 findings / 106 candidates`. (Found by dogfooding, Conv 7.)
+      a=.nexus/active/registries/changelog-registry.yaml
+      [ -f "$a" ] || { echo "ESCALATED: candidates 0 (source files) — derived registry missing"; exit 2; }
+      cand=$(find .claude/skills .nexus/templates .claude/agents -name '*.md' 2>/dev/null | wc -l)
+      cand=$(( cand + $(find CLAUDE.md -name '*.md' 2>/dev/null | wc -l) ))
+      cand=$(( cand + $(find .nexus/active -maxdepth 1 \( -name '*.md' -o -name '*.yaml' \) 2>/dev/null | wc -l) ))
+      [ "$cand" -eq 0 ] && { echo "ESCALATED: candidates 0 (source files)"; exit 2; }
+      # BOUND IS INDEPENDENTLY DERIVED (VC-2 @ 2.9.0): a file is BOUND only if its mtime
+      # could actually be compared, i.e. it falls on one side or the other of the -newer
+      # partition. A path find cannot stat falls out of BOTH arms, so bound < candidates and
+      # the shortfall is reportable. Through v1.3.0 this printed $cand twice.
+      newer=$(find .claude/skills .nexus/templates .claude/agents -name '*.md' -newer "$a" 2>/dev/null | wc -l)
+      newer=$(( newer + $(find CLAUDE.md -newer "$a" 2>/dev/null | wc -l) ))
+      newer=$(( newer + $(find .nexus/active -maxdepth 1 \( -name '*.md' -o -name '*.yaml' \) -newer "$a" 2>/dev/null | wc -l) ))
+      older=$(find .claude/skills .nexus/templates .claude/agents -name '*.md' ! -newer "$a" 2>/dev/null | wc -l)
+      older=$(( older + $(find CLAUDE.md ! -newer "$a" 2>/dev/null | wc -l) ))
+      older=$(( older + $(find .nexus/active -maxdepth 1 \( -name '*.md' -o -name '*.yaml' \) ! -newer "$a" 2>/dev/null | wc -l) ))
+      n=$newer; read=$(( newer + older ))
+      [ "$read" -lt "$cand" ] && { echo "ESCALATED: bound $read < candidates $cand (source files) — $(( cand - read )) file(s) could not be compared by mtime"; exit 2; }
+      [ "$n" -gt "$cand" ] && { echo "ESCALATED: findings $n > candidates $cand (source files) — the two figures were not counted over the same path set"; exit 2; }
+      echo "FILLED: $n findings / $read bound (source files) / $cand candidates (source files)"
+    fixture: |
+      states/ is deliberately excluded from the source set — it changes every checkpoint and
+      would keep this edge permanently stale, which is how a warning becomes wallpaper.
+      Conv 6: 0 newer (current). Conv 7: 4 newer, correctly detecting THIS ISSUE'S OWN edits
+      to nexus-start, nexus-checkpoint, CLAUDE.md and NEXUS-Architecture.md — the mechanism
+      firing on the change that built it (PAT-139).
+      Fires-on-broken proof: `touch` any skill file and re-run; the count must become non-zero
+      (executed Conv 7 — this is the arm that passed on its own, and note that passing was
+      never the problem: the DENOMINATOR was wrong while every verdict looked reasonable).
+      Denominator arm (added Conv 7): findings must never exceed candidates. Point the edge at
+      a very old derived file and confirm `n <= cand`; the pre-fix predicate returned
+      `108 findings / 106 candidates` on E-13's identical shape.
+      Closed-loop partner: /nexus-checkpoint STEP 4 auto-invokes /nexus-changelog-scan when
+      staged paths match this row's source field — boot warns, checkpoint self-heals. As of
+      ISS-240 Phase 3.7 checkpoint READS THIS ROW rather than holding its own copy (see E-07).

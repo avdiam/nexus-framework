@@ -1,0 +1,35 @@
+# NEXUS Project .gitignore
+# Version: 1.0.0 | Date: 2026-08-28 | Sprint: 112
+#
+# Ships to an adopter's project root as `.gitignore` (dist-manifest.txt FRESH directive).
+# Covers the files NEXUS generates that are machine-local and must not be committed.
+# Project-specific build artifacts go at the bottom, where the commented examples are.
+
+# User-specific Claude Code settings — holds the CLAUDE_CODE_FILE_READ_MAX_OUTPUT_TOKENS
+# setting that /nexus:setup writes. Per machine and per clone, never shared.
+.claude/settings.local.json
+
+# Runtime hint files written by the hooks and by boot. Regenerated every session;
+# committing them produces churn in every checkpoint and conflicts on every pull.
+.nexus/.context-window
+.nexus/.context-cache
+.nexus/.freshness-checked
+
+# Binary deliverable backups — managed by /nexus-backup-optimization, not by git.
+# Relevant for creative and mixed project types (docx, pptx, pdf, images).
+.nexus/backups/
+
+# Python caches, from the hooks' interpreter
+__pycache__/
+*.pyc
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Build artifacts — uncomment or extend for your project
+# node_modules/
+# dist/
+# build/
+# .venv/

@@ -1,0 +1,1226 @@
+# patterns-registry.yaml (Prefixed Key-Value Format)
+# Version: 11.0.0 | Date: 2026-03-11 | Sprint: 061
+# Every field globally unique via PAT-XXX prefix - direct find/replace patching
+
+meta.last_id: 146
+meta.active: 52
+
+# --- PAT-004 ---
+PAT-004.name: "llm-behavioral-programming"
+PAT-004.file: "patterns/PAT-004.md"
+PAT-004.type: practice
+PAT-004.domain: "prompt-engineering"
+PAT-004.maturity: established
+PAT-004.description: "10 principles for LLM behavioral programming organized in 4 categories: structural (section tags, format-matches-content, procedural chains), guidance (guide reasoning not script execution, imperatives over suggestions, single source then reference), efficiency (tables over prose, preserve what prevents drift), safety (explicit references, inline failure recovery). 5 former principles retired with evidence (emotional anchoring, identity integration, strategic repetition, mantras, template rigidity). Clarity over compression as governing philosophy. Target 40-80% size reduction with improved fresh-instance clarity."
+PAT-004.use_when:
+  - "Creating new system files or agent definitions"
+  - "Refactoring existing prompts for efficiency"
+  - "Building behavioral specifications for LLMs"
+  - "Optimizing token usage while maintaining functionality"
+  - "NOT for human documentation or API specs"
+PAT-004.successes: 0
+PAT-004.failures: 0
+PAT-004.neutral: 0
+PAT-004.effectiveness: 1.00
+PAT-004.last_used: ""
+PAT-004.by_issue_type: {}
+PAT-004.phase_affinity: ["analysis", "implementation", "evaluation"]
+PAT-004.synergies: []
+PAT-004.conflicts: []
+
+# --- PAT-049 ---
+PAT-049.name: "foundation-first-repair"
+PAT-049.file: "patterns/PAT-049.md"
+PAT-049.type: principle
+PAT-049.domain: "system-repair"
+PAT-049.maturity: validated
+PAT-049.description: "Always repair foundation issues before building new layers - don't build on broken base. Adding capabilities to broken systems compounds problems; fix fundamentals first."
+PAT-049.use_when:
+  - "Enhancement failing due to underlying system issues"
+  - "Foundation issues discovered during feature work"
+  - "Cascading failures from base layer problems"
+  - "Technical debt blocking new capabilities"
+PAT-049.successes: 0
+PAT-049.failures: 0
+PAT-049.neutral: 0
+PAT-049.effectiveness: 0.70
+PAT-049.last_used: ""
+PAT-049.by_issue_type: {}
+PAT-049.phase_affinity: ["analysis", "implementation"]
+PAT-049.synergies: []
+PAT-049.conflicts: []
+
+
+# --- PAT-058 ---
+PAT-058.name: "documentation-driven-discovery"
+PAT-058.file: "patterns/PAT-058.md"
+PAT-058.type: methodology
+PAT-058.domain: "system-understanding"
+PAT-058.maturity: proven
+PAT-058.description: "Systematic documentation creation reveals hidden system capabilities. Deep analysis of every file uncovers what actually exists vs assumptions - typically finding 1.5-2x more than expected."
+PAT-058.use_when:
+  - "System capabilities are unclear or undocumented"
+  - "Documentation audit needed for complex system"
+  - "Gap suspected between perceived and actual state"
+  - "Understanding true system capability before major changes"
+  - "Before major architecture decisions — document first to discover what exists"
+PAT-058.successes: 0
+PAT-058.failures: 0
+PAT-058.neutral: 0
+PAT-058.effectiveness: 0.90
+PAT-058.last_used: ""
+PAT-058.by_issue_type: {}
+PAT-058.phase_affinity: ["analysis", "implementation", "research"]
+PAT-058.synergies: []
+PAT-058.conflicts: []
+
+# --- PAT-063 ---
+PAT-063.name: "systematic-validation-complex-systems"
+PAT-063.file: "patterns/PAT-063.md"
+PAT-063.type: methodology
+PAT-063.domain: "testing"
+PAT-063.maturity: proven
+PAT-063.description: "Four-phase validation for complex systems — Component → Integration → System Coherence → User Journey — scaled to complexity. Integration/coherence phases carry the boundary-crossing map, consumer verification, shared-artifact CRUD flows and the domain-coherence checklist (absorbed from PAT-082); tiered depth matches rigor to component importance."
+PAT-063.use_when:
+  - "Multi-component features or system-wide changes"
+  - "Architectural modifications affecting multiple files, or a periodic / post-schema-change health check of an operation domain"
+  - "Integration of new capabilities into existing system"
+  - "Complex workflows requiring end-to-end validation"
+  - "NOT for simple single-file changes"
+PAT-063.successes: 0
+PAT-063.failures: 0
+PAT-063.neutral: 0
+PAT-063.effectiveness: 0.90
+PAT-063.last_used: ""
+PAT-063.by_issue_type: {}
+PAT-063.phase_affinity: ["implementation", "evaluation"]
+PAT-063.synergies: ["PAT-067"]
+PAT-063.conflicts: []
+
+# --- PAT-064 ---
+PAT-064.name: "phased-feature-implementation"
+PAT-064.file: "patterns/PAT-064.md"
+PAT-064.type: methodology
+PAT-064.domain: "feature-development"
+PAT-064.maturity: validated
+PAT-064.description: "Split complex features into phases by value delivery - Phase 1 delivers 80% value immediately (core, no dependencies), Phase 2+ handles enhanced capabilities. Faster delivery, early feedback, reduced context usage."
+PAT-064.use_when:
+  - "Complex feature with clear value separation"
+  - "Dependencies blocking full implementation"
+  - "Context limits approaching during feature work"
+  - "Users need value quickly, can't wait for complete feature"
+PAT-064.successes: 0
+PAT-064.failures: 0
+PAT-064.neutral: 0
+PAT-064.effectiveness: 0.70
+PAT-064.last_used: ""
+PAT-064.by_issue_type: {}
+PAT-064.phase_affinity: ["analysis", "implementation"]
+PAT-064.synergies: []
+PAT-064.conflicts: []
+
+# --- PAT-066 ---
+PAT-066.name: "user-navigation-flow-design"
+PAT-066.file: "patterns/PAT-066.md"
+PAT-066.type: methodology
+PAT-066.domain: "interface-design"
+PAT-066.maturity: proven
+PAT-066.description: "Mental simulation of user navigation flow before menu creation - classify operations as context-setters (L1), context-dependent (L2), or backend-only (not in menu). Prevents invalid states, matches user mental models."
+PAT-066.use_when:
+  - "Creating new menu interfaces"
+  - "Updating existing menu structures"
+  - "Validating user navigation flows"
+  - "Designing command interfaces"
+PAT-066.successes: 0
+PAT-066.failures: 0
+PAT-066.neutral: 0
+PAT-066.effectiveness: 0.85
+PAT-066.last_used: ""
+PAT-066.by_issue_type: {}
+PAT-066.phase_affinity: ["analysis", "implementation", "evaluation"]
+PAT-066.synergies: []
+PAT-066.conflicts: []
+
+# --- PAT-067 ---
+PAT-067.name: "mental-execution-validation"
+PAT-067.file: "patterns/PAT-067.md"
+PAT-067.type: methodology
+PAT-067.domain: "quality-assurance"
+PAT-067.maturity: established
+PAT-067.description: "Execute work mentally before delivery - walk through as if you knew nothing. 60-70% complete = would struggle. Includes adversarial mode for high-confidence outputs: must-find mandate (halt if zero issues), trade-off surfacing, perspective shift from generator to reviewer. Catches gaps and blind spots before users encounter them. Merged E2E integration-simulation (PAT-090, Sprint 105): for 5+ interconnected files, trace 3-6 end-to-end scenarios across file boundaries and enumerate distributed writers."
+PAT-067.use_when:
+  - "Before marking work complete"
+  - "Before delivering specifications or documentation"
+  - "When quality uncertainty exists"
+  - "Creating operations or procedures others will execute"
+  - "When output confidence is high (>85%) — apply adversarial mode"
+  - "After generating complex proposals, designs, or recommendations"
+  - "Implementation touches 5+ interconnected files or modifies cross-file routing/lifecycle — apply E2E integration simulation"
+PAT-067.successes: 0
+PAT-067.failures: 0
+PAT-067.neutral: 0
+PAT-067.effectiveness: 1.00
+PAT-067.last_used: ""
+PAT-067.by_issue_type: {}
+PAT-067.phase_affinity: ["all"]
+PAT-067.synergies: ["PAT-063"]
+PAT-067.conflicts: []
+
+# --- PAT-079 ---
+PAT-079.name: "early-pivot-recognition"
+PAT-079.file: "patterns/PAT-079.md"
+PAT-079.type: methodology
+PAT-079.domain: "decision-making"
+PAT-079.maturity: emerging
+PAT-079.description: "Recognize when early analysis invalidates plan and pivot decisively. Strong pivot signals (design flaws) vs weak signals (implementation difficulty). Optimal window: 0-20% progress. After 30%, pivot rarely justified."
+PAT-079.use_when:
+  - "Early analysis phase reveals fundamental plan flaws"
+  - "Better architecture discovered during initial investigation"
+  - "Core assumptions proven false by research"
+  - "NOT for implementation challenges or minor adjustments"
+  - "When progress is under 20% and a fundamentally simpler approach has emerged"
+PAT-079.successes: 0
+PAT-079.failures: 0
+PAT-079.neutral: 0
+PAT-079.effectiveness: 0.60
+PAT-079.last_used: ""
+PAT-079.by_issue_type: {}
+PAT-079.phase_affinity: ["analysis", "research"]
+PAT-079.synergies: []
+PAT-079.conflicts: []
+
+# --- PAT-083 ---
+PAT-083.name: "structured-persistence-ownership"
+PAT-083.file: "patterns/PAT-083.md"
+PAT-083.type: principle
+PAT-083.domain: "state-management"
+PAT-083.maturity: emerging
+PAT-083.description: "Assign explicit persistence responsibility per component — producers prepare content, designated persisters own the write. Prevents both gaps (nobody saved) and duplication (everyone saved inconsistently)."
+PAT-083.use_when:
+  - "When multiple components produce state that must be preserved"
+  - "When checkpoint/save workflows touch shared state files"
+  - "When debugging reveals lost work or inconsistent saves"
+  - "When designing new operations that write to shared state files"
+  - "When 'who saves what' is ambiguous after refactoring"
+PAT-083.successes: 0
+PAT-083.failures: 0
+PAT-083.neutral: 0
+PAT-083.effectiveness: 0.55
+PAT-083.last_used: ""
+PAT-083.by_issue_type: {}
+PAT-083.phase_affinity: ["analysis", "implementation", "evaluation"]
+PAT-083.synergies: ["PAT-084"]
+PAT-083.conflicts: []
+
+# --- PAT-084 ---
+PAT-084.name: "spec-as-authority"
+PAT-084.file: "patterns/PAT-084.md"
+PAT-084.type: principle
+PAT-084.domain: "system-design"
+PAT-084.maturity: validated
+PAT-084.description: "Establish unidirectional authority — specs govern implementations, never the reverse. Drafts graduate into specs and are removed. Fixes implementation drift instead of weakening specs to match reality."
+PAT-084.use_when:
+  - "When spec/implementation pairs exist and may drift"
+  - "When discovering conflict between design and reality"
+  - "After major changes that may introduce spec violations"
+  - "When drafts and finished specs coexist ambiguously"
+PAT-084.successes: 0
+PAT-084.failures: 0
+PAT-084.neutral: 0
+PAT-084.effectiveness: 0.70
+PAT-084.last_used: ""
+PAT-084.by_issue_type: {}
+PAT-084.phase_affinity: ["analysis", "implementation", "evaluation"]
+PAT-084.synergies: ["PAT-083"]
+PAT-084.conflicts: []
+
+# --- PAT-085 ---
+PAT-085.name: "clarity-over-compression"
+PAT-085.file: "patterns/PAT-085.md"
+PAT-085.type: principle
+PAT-085.domain: "design"
+PAT-085.maturity: established
+PAT-085.description: "Optimize LLM instruction files for fresh-reader clarity, not byte count. Remove noise (meta-text, emotional vocabulary, identity claims) and redundancy (same rule in multiple places), but preserve structure that prevents drift (field specs, schemas, display templates, section tags). Token savings are a consequence of clarity, not the objective. Variant clarity-upgrade-during-simplification: simplifying skills that carry cross-skill preservation contracts is an opportunity to STRENGTHEN binding documentation, not merely retain (Sprint 088 D.3 nexus-rollback L107 sprint-tag callout origin)."
+PAT-085.use_when:
+  - "Simplifying or refactoring system files"
+  - "Writing new LLM instruction files"
+  - "Evaluating whether content should be kept or removed"
+  - "NOT for data payloads, code optimization, or human-facing docs"
+PAT-085.successes: 0
+PAT-085.failures: 0
+PAT-085.neutral: 0
+PAT-085.effectiveness: 1.00
+PAT-085.last_used: ""
+PAT-085.by_issue_type: {}
+PAT-085.phase_affinity: ["all"]
+PAT-085.synergies: ["PAT-004"]
+PAT-085.conflicts: []
+
+# --- PAT-087 ---
+PAT-087.name: "reframe-before-design"
+PAT-087.file: "patterns/PAT-087.md"
+PAT-087.type: principle
+PAT-087.domain: "design"
+PAT-087.maturity: validated
+PAT-087.description: "Reframe problems via First Principles before designing solutions. Initial problem framing carries implicit assumptions that constrain the solution space — reframing reveals the actual need, which may be fundamentally different from what was asked for."
+PAT-087.use_when:
+  - "Starting design work on new components or methodologies"
+  - "When the problem description feels like it already implies a solution"
+  - "When early designs feel constrained or incremental"
+  - "When a request uses language like 'create a simpler version of X'"
+  - "When multiple stakeholders frame the same need differently"
+PAT-087.successes: 0
+PAT-087.failures: 0
+PAT-087.neutral: 0
+PAT-087.effectiveness: 0.65
+PAT-087.last_used: ""
+PAT-087.by_issue_type: {}
+PAT-087.phase_affinity: ["analysis"]
+PAT-087.synergies: []
+PAT-087.conflicts: []
+
+
+# --- PAT-093 ---
+PAT-093.name: "entry-ramp-architecture"
+PAT-093.file: "patterns/PAT-093.md"
+PAT-093.type: methodology
+PAT-093.domain: "documentation-design"
+PAT-093.maturity: emerging
+PAT-093.description: "Structure onboarding as one document per user journey stage (Discover→Install→Learn→Fix), layered on top of existing deep reference material. Entry ramp documents never duplicate reference content — they provide context, motivation, and navigation to reach the right reference at the right time. Validates per stage with persona-based struggle tests."
+PAT-093.use_when:
+  - "System has extensive reference docs but poor newcomer onboarding"
+  - "Users abandon before reaching first value"
+  - "Documentation organized by system architecture rather than user journey"
+  - "Multiple user types need to reach the same system through different entry points"
+  - "Building a documentation gateway / index / catalog front door over an existing guide library"
+PAT-093.successes: 0
+PAT-093.failures: 0
+PAT-093.neutral: 0
+PAT-093.effectiveness: 0.50
+PAT-093.last_used: ""
+PAT-093.by_issue_type: {}
+PAT-093.phase_affinity: ["analysis", "implementation", "evaluation"]
+PAT-093.synergies: ["PAT-058"]
+PAT-093.conflicts: []
+
+# --- PAT-095 ---
+PAT-095.name: "isolated-context-advantage"
+PAT-095.file: "patterns/PAT-095.md"
+PAT-095.type: methodology
+PAT-095.domain: "cognitive-architecture"
+PAT-095.maturity: proven
+PAT-095.description: "Recognize when isolation is the feature, not a limitation. Offload tasks suffering from anchoring, confirmation, or sunk-cost bias to isolated sub-agents with curated context. Design what to include and exclude deliberately; define result contracts before spawning."
+PAT-095.use_when:
+  - "Reviewing work just completed in the same conversation"
+  - "Need genuinely fresh perspective on established direction"
+  - "Creative exploration keeps converging on same ideas"
+  - "Objective assessment where sunk cost bias is a risk"
+  - "Devil's advocate or red team exercises"
+PAT-095.successes: 0
+PAT-095.failures: 0
+PAT-095.neutral: 0
+PAT-095.effectiveness: 0.90
+PAT-095.last_used: ""
+PAT-095.by_issue_type: {}
+PAT-095.phase_affinity: ["all"]
+PAT-095.synergies: ["PAT-067"]
+PAT-095.conflicts: []
+
+# --- PAT-097 ---
+PAT-097.name: "multi-source-verification"
+PAT-097.file: "patterns/PAT-097.md"
+PAT-097.type: methodology
+PAT-097.domain: "debugging"
+PAT-097.maturity: emerging
+PAT-097.description: "When debugging data accuracy issues, compare the same metric from multiple independent sources to isolate which source is unreliable. Independent sources have independent failure modes — divergence reveals the fault, agreement increases confidence. Trust sources closest to raw data over pre-aggregated values."
+PAT-097.use_when:
+  - "When debugging data accuracy or unexpected metric values"
+  - "When API-reported values contradict observed system behavior"
+  - "When validating instrumentation or monitoring output"
+  - "When cross-checking derived calculations against component sources"
+PAT-097.successes: 0
+PAT-097.failures: 0
+PAT-097.neutral: 0
+PAT-097.effectiveness: 0.55
+PAT-097.last_used: ""
+PAT-097.by_issue_type: {}
+PAT-097.phase_affinity: ["analysis", "implementation", "evaluation"]
+PAT-097.synergies: []
+PAT-097.conflicts: []
+
+# --- PAT-098 ---
+PAT-098.name: "grep-before-rename"
+PAT-098.file: "patterns/PAT-098.md"
+PAT-098.type: practice
+PAT-098.domain: "refactoring"
+PAT-098.maturity: established
+PAT-098.description: "Before renaming any cross-referenced identifier, grep all occurrences first to produce a complete reference list, then rename atomically. Transforms possibly-incomplete renames into definitely-complete ones by eliminating memory-based discovery and providing a convergence signal. Recurring-anchor variant fires reliably at NEW-skill-deletion ORIGINAL cut points only — NOT during simplification, deferred-route-cascade, §POST-TYPE amendment, or Validate-phase inline-fix (Sprint 088 empirical: 4/4 deletions fire vs 0/9 non-deletion phases). Dual-form discipline (Sprint 094): search BOTH canonical/prefixed and bare/colloquial token forms — rosters and inventories use bare names that prefixed-only greps miss (canonical-form grep ≠ all-form grep). Generalized (Sprint 095, ISS-202): the grep-as-acceptance-criterion discipline extends beyond rename to ANY N-surface consistency fix — encode cross-surface completeness as an executable predicate (Success Criterion) over the whole file-class, not a manual Files-Affected enumeration; the predicate catches touchpoints enumeration misses (ISS-202 SC-03 surfaced a 3rd contaminated site the plan never listed). Namespace-scoped predicate (Sprint 097, ISS-205): when the target anchor format is also used by OTHER files in the project, raw cross-file grep over-counts (skills own their own section namespaces); correct predicate = audited-file paired tags ∩ external refs only. Fidelity caveat (Sprint 101, ISS-211/212): the grep predicate proves completeness/PRESENCE, NOT equivalence — for delta/duplication work (inlining a canonical block into N variant files), verify fidelity by DIFFING each reproduced block against its canonical source, not presence-grep (presence ≠ equivalence); fidelity standard = faithful semantics in the host file's format, not byte-verbatim. Execution caveat (Sprint 108, ISS-233): a DECLARED vocabulary is a contract — running only a subset of the declared terms and recording a per-class evidence line reads identically to a full run, so record evidence per term × class including zero-hit combinations (declaration ≠ execution, the sibling of presence ≠ equivalence)."
+PAT-098.use_when:
+  - "Renaming section names, tags, or labels referenced across multiple files"
+  - "Renaming markdown or configuration identifiers in multi-file systems"
+  - "Refactoring enum values, status labels, or severity levels used across a project"
+  - "Any rename where cross-file references could plausibly exist"
+  - "Integrity / disconnect cross-greps verifying a deleted identifier is fully unreferenced — search both bare and prefixed forms"
+  - "Any N-surface consistency fix (relabel, contract reconciliation, doc cleanup) — define a grep/test acceptance criterion as the completeness check instead of a manual enumerated list"
+  - "Verifying fidelity of inlined/duplicated content against a canonical source — diff each reproduced block, don't presence-grep (presence ≠ equivalence)"
+  - "Changing a cross-skill field/identifier whose consumers may touch it at runtime or via inheritance without naming the literal token — derive the consumer set by walking the entity lifecycle (producer→finalizer→consumer), not the Files-Affected list"
+  - "Running a predicate whose vocabulary was DECLARED as a set (concept + variants + container term) — record evidence per term × class including zero-hit combinations; a per-class-only evidence line cannot reveal that a declared term was never run"
+PAT-098.successes: 0
+PAT-098.failures: 0
+PAT-098.neutral: 0
+PAT-098.effectiveness: 1.00
+PAT-098.last_used: ""
+PAT-098.by_issue_type: {}
+PAT-098.phase_affinity: ["analysis", "implementation", "evaluation"]
+PAT-098.synergies: ["PAT-121"]
+PAT-098.conflicts: []
+
+# --- PAT-099 ---
+  - "Initializing a new NEXUS project via /nexus-setup-project"
+  - "A user asks what MCP servers or tools to install for a project"
+  - "Reviewing tooling for an existing project that feels over or under-equipped"
+  - "Planning external resources for research phases involving specific tech stacks"
+
+# --- PAT-102 ---
+  - "Authoring or revising validation/evaluate/closure skill sections (nexus-validate, nexus-close-issue, nexus-close-sprint)"
+  - "Authoring checkpoint skill sections that make accept/reject decisions on submitted work"
+  - "Reviewing an existing methodology skill for premature-completion vulnerability — fewer than 4 of 6 components present signals consolidation needed"
+  - "Any skill where context pressure could produce rationalized shortcuts that bypass discipline"
+
+# --- PAT-103 ---
+PAT-103.name: "source-fix-over-downstream-bridge"
+PAT-103.file: "patterns/PAT-103.md"
+PAT-103.type: principle
+PAT-103.domain: "protocol-amendment"
+PAT-103.maturity: emerging
+PAT-103.description: "When an adversarial finding's evidence is 'rule X enumerates A, B, C but not D, and we depend on D inheriting,' surface 'Fix the source rule' as an explicit option in the resolution menu alongside Walk/Fix-downstream/Skip. Source-fix at the canonical surface converts every downstream bridge into a citation; bridge-only at the consumer makes future readers chase inheritance through prose."
+PAT-103.use_when:
+  - "Adversarial review surfaces 'rule X lists A,B,C but not D' shape findings"
+  - "Rule lives at a single canonical location (CLAUDE.md protocol section, registry schema, top-level skill rule table)"
+  - "Multiple consumers depend on the same inheritance"
+  - "Resolution menus surfaced for adversarial findings — present 'Fix the source rule' as 4th option"
+PAT-103.successes: 0
+PAT-103.failures: 0
+PAT-103.neutral: 0
+PAT-103.effectiveness: 0.55
+PAT-103.last_used: ""
+PAT-103.by_issue_type: {}
+PAT-103.phase_affinity: ["analysis", "implementation", "evaluation"]
+PAT-103.synergies: ["PAT-085"]
+PAT-103.conflicts: []
+
+# --- PAT-104 ---
+PAT-104.name: "resumption-check-bypass-on-retry"
+PAT-104.file: "patterns/PAT-104.md"
+PAT-104.type: principle
+PAT-104.domain: "trigger-mechanism-design"
+PAT-104.maturity: emerging
+PAT-104.description: "Trigger mechanisms that (a) log verdicts to a durable audit log used for resumption-detection AND (b) have a Fix-inline retry path on FAIL or CONCERNS must include explicit MANDATORY re-invocation language that bypasses the resumption-check. Both prior FAIL/CONCERNS verdict and post-fix re-run verdict must be preserved in the audit log (not overwritten) for audit-trail integrity. Caught only via Mental Simulation walking post-fix re-entry — table-based review of the trigger spec misses it."
+PAT-104.use_when:
+  - "Designing or reviewing a trigger mechanism with verdict-logging + Fix-inline retry"
+  - "Adding resumption-check rows to skill flows — verify every Fix-inline path explicitly bypasses the row"
+  - "Pre-mortem or Mental Simulation in Analysis or Build phase for trigger+retry design"
+  - "Reviewing existing trigger+retry mechanisms for the same gap before adding new ones"
+PAT-104.successes: 0
+PAT-104.failures: 0
+PAT-104.neutral: 0
+PAT-104.effectiveness: 0.50
+PAT-104.last_used: ""
+PAT-104.by_issue_type: {}
+PAT-104.phase_affinity: ["analysis", "implementation"]
+PAT-104.synergies: ["PAT-067"]
+PAT-104.conflicts: []
+
+# --- PAT-105 ---
+PAT-105.name: "phase-collapse-on-pre-drafted-canonical-sources"
+PAT-105.file: "patterns/PAT-105.md"
+PAT-105.type: methodology
+PAT-105.domain: "phase-effort-calibration"
+PAT-105.maturity: proven
+PAT-105.description: "When canonical sources upstream (third-pass synthesis, ratified proposals, prior-pass deliverables) pre-resolve patch text AND design decisions, Analysis collapses to cross-check + delta-compose, Build collapses to patch-application + brief authoring, and Validate Tier 3 cold re-read remains load-bearing. Adversarial review at Build still surfaces ~2 MED findings per C:3 issue outside canonical scope — skipping it under collapse is the dominant failure mode. Compresses 30-50% phase effort without sacrificing adversarial surface."
+PAT-105.use_when:
+  - "Issue arrives with canonical sources whose verdicts have already been ratified upstream"
+  - "Solution-Design fields already enumerate carve-outs, schema additions, version targets before Analysis begins"
+  - "Build's design space is mostly transcription + delta-compose, not original authoring"
+  - "Calibrating phase effort for C:2-C:3 issues consuming third-pass synthesis or revised-proposal artifacts"
+  - "CAUTION: Do NOT apply when canonical source is a draft (not ratified), or when scope extends beyond canonical bounds"
+PAT-105.successes: 0
+PAT-105.failures: 0
+PAT-105.neutral: 0
+PAT-105.effectiveness: 0.85
+PAT-105.last_used: ""
+PAT-105.by_issue_type: {}
+PAT-105.phase_affinity: ["analysis", "implementation", "evaluation"]
+PAT-105.synergies: ["PAT-084", "PAT-095"]
+PAT-105.conflicts: []
+
+# --- PAT-107 ---
+PAT-107.name: "in-text-verdict-anchors"
+PAT-107.file: "patterns/PAT-107.md"
+PAT-107.type: practice
+PAT-107.domain: "gate-design"
+PAT-107.maturity: emerging
+PAT-107.description: "When authoring LLM-executable gates whose verdicts must be reproducible by fresh-instance reads, embed 2-4 worked examples directly in the gate body — one per verdict class, each with inputs + layer-by-layer application + canonical verdict + WHY line. Inline placement is load-bearing — out-of-band examples decouple from the rule at execution time; in-text examples force calibration to travel with the rule."
+PAT-107.use_when:
+  - "Authoring T1/T2 gates or verdict-bearing checklists in skill files"
+  - "Designing logic that fresh LLM instances must execute consistently across sessions and conversations"
+  - "Creating gates where verdict thresholds carry acknowledged judgment ambiguity (LLM semantic checks, soft-warning layers)"
+  - "NOT for purely deterministic gates (regex hard-blocks, presence checks) — examples add noise without anchoring value"
+PAT-107.successes: 0
+PAT-107.failures: 0
+PAT-107.neutral: 0
+PAT-107.effectiveness: 0.55
+PAT-107.last_used: ""
+PAT-107.by_issue_type: {}
+PAT-107.phase_affinity: ["analysis", "implementation"]
+PAT-107.synergies: ["PAT-067"]
+PAT-107.conflicts: []
+
+# --- PAT-108 ---
+  - "Before locking refactor, merge, or Ditch verdicts on framework targets"
+  - "During analytical audits with per-target disposition decisions"
+  - "Whenever caller-claim verification informs structural change estimates"
+  - "NOT for trivial single-file changes with no cross-skill surface"
+  - "Labeling refactor effort from grep results — separate hit-density from structural-change-weight (PAT-110 companion check)"
+  - "Before locking any merge X-into-Y disposition — anti-merge 2-axis (PAT-111 companion check)"
+
+# --- PAT-109 ---
+PAT-109.name: "disconnect-not-delete-guard"
+PAT-109.file: "patterns/PAT-109.md"
+PAT-109.type: principle
+PAT-109.domain: "refactoring-quality"
+PAT-109.maturity: established
+PAT-109.description: "When wiring a successor (new hook, skill, or method), pair the wire-successor step explicitly with delete-predecessor + scrub-references steps in the same commit. Prevents 'disconnected-but-undeleted' accumulation of dead code, stale doc pointers, orphan permissions, and incorrect architecture descriptions. Sprint 072 → Sprint 084 (12 sprints) evidence: 514 dead lines + 3 stale doc pointers + 2 orphan permissions."
+PAT-109.use_when:
+  - "At every successor-wiring refactor (new hook replaces old, new skill replaces old, new method replaces old)"
+  - "When reviewing Build phase commits that introduce a successor"
+  - "At Validate phase as a quality gate scanning for predecessor orphans"
+  - "NOT when predecessor is intentionally preserved as documented dual-path fallback"
+PAT-109.successes: 0
+PAT-109.failures: 0
+PAT-109.neutral: 0
+PAT-109.effectiveness: 1.00
+PAT-109.last_used: ""
+PAT-109.by_issue_type: {}
+PAT-109.phase_affinity: ["analysis", "implementation", "evaluation"]
+PAT-109.synergies: ["PAT-098"]
+PAT-109.conflicts: []
+
+# --- PAT-112 ---
+PAT-112.name: "explicit-discipline-over-implicit-assumption-in-methodology-output"
+PAT-112.file: "patterns/PAT-112.md"
+PAT-112.type: methodology
+PAT-112.domain: "methodology-authoring"
+PAT-112.maturity: established
+PAT-112.description: "When methodology output (SC, status, audit deliverables, framing defaults) carries an implicit default that could go either way, pre-bake the explicit discipline at authoring time so the desired default is visible in the output itself (e.g., 'SCAN-then-classify' framing for visibility-class SC; 'AUDIT-DEFERRED to ISS-X' labeling for partial audit scope). Shifts catch from late adversarial review to authoring time."
+PAT-112.use_when:
+  - "Drafting Success Criteria where visibility-class shapes carry implicit-empty risk"
+  - "Producing audit deliverables where partial-scope completion needs explicit labeling"
+  - "Methodology output authoring (Analysis Step 3 SC drafting, Research Step 5 deliverable, Build status emission)"
+  - "When the wrong default is recoverable only at downstream adversarial review"
+  - "NOT for conventions universally understood by trained operators"
+PAT-112.successes: 0
+PAT-112.failures: 0
+PAT-112.neutral: 0
+PAT-112.effectiveness: 1.00
+PAT-112.last_used: ""
+PAT-112.by_issue_type: {}
+PAT-112.phase_affinity: ["analysis", "research", "implementation"]
+PAT-112.synergies: ["PAT-113", "PAT-102", "PAT-107"]
+PAT-112.conflicts: []
+
+# --- PAT-113 ---
+PAT-113.name: "canonical-pointer-pattern-for-shared-definitions"
+PAT-113.file: "patterns/PAT-113.md"
+PAT-113.type: principle
+PAT-113.domain: "cross-file-architecture"
+PAT-113.maturity: established
+PAT-113.description: "When ≥2 skill files reference the same shared definition (signal helper, taxonomy, vocabulary, threshold, enum, syntax template), canonicalize at ONE location and have all other references point to it via identical 'single source of truth: defined in {path}#{anchor}' phrasing — do not duplicate the definition body inline. Structural fix that collapses drift surface from O(N) to O(1)."
+PAT-113.use_when:
+  - "≥2 skill files reference the same definition genuinely shared and consequential"
+  - "Adopting a new vocabulary or syntax that will be referenced across multiple skills"
+  - "Refactoring inline duplication discovered at adversarial review"
+  - "When the definition has multiple senses requiring explicit enumeration"
+  - "NOT for coincidentally similar but semantically distinct references"
+  - "NOT for trivially short / stable definitions where drift risk is negligible"
+PAT-113.successes: 0
+PAT-113.failures: 0
+PAT-113.neutral: 0
+PAT-113.effectiveness: 1.00
+PAT-113.last_used: ""
+PAT-113.by_issue_type: {}
+PAT-113.phase_affinity: ["analysis", "implementation", "evaluation"]
+PAT-113.synergies: ["PAT-098", "PAT-112", "PAT-103"]
+PAT-113.conflicts: []
+
+# --- PAT-114 ---
+PAT-114.name: "baseline-anchored-sc-calibration"
+PAT-114.file: "patterns/PAT-114.md"
+PAT-114.type: methodology
+PAT-114.domain: "sc-calibration"
+PAT-114.maturity: emerging
+PAT-114.description: "Anchor quantitative SC targets (LOC, file-count, complexity) to commit-hash-verified baselines at authoring time; recompute drift at execution and apply proportional correction before Validate. Prevents false-negative verdicts on structurally-achieved intent when source artifacts mutate between research and execution conversations."
+PAT-114.use_when:
+  - "Authoring audit-deliverables with quantitative LOC or file-count Success Criteria"
+  - "Multi-sprint or multi-conversation plans where research conv ≠ execution conv"
+  - "Refactor or simplification work where source artifact will mutate before execution"
+  - "CAUTION: Only when source artifact is under version control (commit-hash anchorable)"
+PAT-114.successes: 0
+PAT-114.failures: 0
+PAT-114.neutral: 0
+PAT-114.effectiveness: 0.55
+PAT-114.last_used: ""
+PAT-114.by_issue_type: {}
+PAT-114.phase_affinity: ["all"]
+PAT-114.synergies: ["PAT-105", "PAT-112"]
+PAT-114.conflicts: []
+
+# --- PAT-116 ---
+  - "After Build §POST-TYPE on multi-phase refactor or simplification ISSes implementing a sprint-level strategic decision"
+  - "During Validate adversarial pass on cross-skill changes where user intent is broader than any single sub-task"
+  - "When implementation involved scope-bend or compression decisions where 'achieve the strategic intent' is distinct from 'modify correctly'"
+  - "When a named strategic intent exists in sprint-state DECISIONS or prior-sprint pivot above the per-skill level"
+
+# --- PAT-117 ---
+PAT-117.name: "analysis-prelock-reformulation-when-strip-vacuous"
+PAT-117.file: "patterns/PAT-117.md"
+PAT-117.type: practice
+PAT-117.domain: "refactoring-quality"
+PAT-117.maturity: emerging
+PAT-117.description: "At Analysis Topic-1-style treatment decisions for cleanup/refactor issues, pre-lock THREE branches (not two): row-strip, section-removal-when-vacuous-of-content, AND PAT-085 reformulation when pure strip leaves a section vacuous of guidance. Branch 3 is a proactive Analysis decision, not a Build-time discovery — compresses decision distance from Build→§POST-TYPE→Validate down to Analysis-lock→Build-execute. **Composition with PAT-098** (Sprint 090 ISS-188 Wave A refinement): locking a section at Analysis covers the lock site only — host-file historical accretion may leave orphan hits outside the lock. At Build §PRE-TYPE, ALSO commission a file-wide vocab grep on each host file (not just the locked section) per PAT-098. Wave A nexus-research/SKILL.md surfaced 8 orphan multi-env hits outside locked L65-86 — caught by PAT-098 sweep, not by PAT-117 alone."
+PAT-117.use_when:
+  - "Cleanup/refactor/simplification issues over multiple guidance-bearing skill or doc sections"
+  - "Topic-1-style treatment decisions at Analysis where the strip set crosses guidance content"
+  - "Cascade-companion follow-on issues to backbone cleanups in a strategic-pivot arc"
+  - "When prior cleanup sprint discovered reformulation-at-Build deviations (signal that Analysis should pre-lock)"
+PAT-117.successes: 0
+PAT-117.failures: 0
+PAT-117.neutral: 0
+PAT-117.effectiveness: 0.60
+PAT-117.last_used: ""
+PAT-117.by_issue_type: {}
+PAT-117.phase_affinity: ["analysis"]
+PAT-117.synergies: ["PAT-085", "PAT-098", "PAT-049"]
+PAT-117.conflicts: []
+
+# --- PAT-118 ---
+PAT-118.name: "diagnose-gap-nature-before-mechanism"
+PAT-118.file: "patterns/PAT-118.md"
+PAT-118.type: principle
+PAT-118.domain: "harness-discipline"
+PAT-118.maturity: emerging
+PAT-118.description: "Before building a mechanism to close a recurring discipline gap, verify TWO things against primary sources: the gap's NATURE (awareness/delivery vs attention/compliance vs infeasible-mechanism) and the platform's FEASIBILITY (does it expose the surface the mechanism needs?). Advisory mechanisms have a hard ceiling on attention/compliance gaps; some mechanisms are platform-infeasible. Diagnosing both before build avoids sunk cost on mechanisms that structurally cannot work."
+PAT-118.use_when:
+  - "A recurring-discipline gap recurs despite documentation and a remediation mechanism is being considered"
+  - "Choosing among enforcement mechanisms (hook / skill-gate / widget / convention)"
+  - "Any platform-integration decision where a mechanism depends on an assumed platform capability"
+  - "CAUTION: not for one-shot non-recurring issues where no mechanism is being built"
+PAT-118.successes: 0
+PAT-118.failures: 0
+PAT-118.neutral: 0
+PAT-118.effectiveness: 0.50
+PAT-118.last_used: ""
+PAT-118.by_issue_type: {}
+PAT-118.phase_affinity: ["analysis", "research"]
+PAT-118.synergies: []
+PAT-118.conflicts: []
+
+# --- PAT-119 ---
+PAT-119.name: "issue-premise-drift-check-at-execution"
+PAT-119.file: "patterns/PAT-119.md"
+PAT-119.type: principle
+PAT-119.domain: "premise-verification"
+PAT-119.maturity: established
+PAT-119.description: "Treat an issue's (or any parked design decision's) pre-specified options, named artifacts (file paths, section names, pattern/issue IDs), and asserted premises — including QUANTITATIVE ones (sizes, counts, thresholds the design was justified on) — as a hypothesis to verify against PRIMARY SOURCES at Analysis, before designing, not as ground truth. The landscape drifts between specification and execution (and quantitative premises drift silently as the system grows); re-verify/re-measure the load-bearing premise against the live file/registry/code, reframe any drift as a finding, then lock direction."
+PAT-119.use_when:
+  - "At Analysis, before locking design direction, when an issue names concrete artifacts (file paths, section names, pattern/issue numbers) or pre-specifies design forks"
+  - "Executing an issue created in an earlier sprint (large drift window between creation and execution)"
+  - "Activating or resuming a design parked across intervening work — a deferred decision or plan set aside — not only a formal issue document"
+  - "When the load-bearing premise is quantitative (a size, count, or threshold the design was justified on) — re-measure it at activation, as these drift silently as the system grows"
+  - "When an issue asserts a premise about current state cheap to verify and expensive to get wrong"
+  - "CAUTION: skip for issues with no concrete pre-specified premises, or premises that are trivially stable"
+PAT-119.successes: 0
+PAT-119.failures: 0
+PAT-119.neutral: 0
+PAT-119.effectiveness: 1.00
+PAT-119.last_used: ""
+PAT-119.by_issue_type: {}
+PAT-119.phase_affinity: ["analysis"]
+PAT-119.synergies: ["PAT-098", "PAT-087"]
+PAT-119.conflicts: []
+
+# --- PAT-120 ---
+  - "Rebuilding an architecture or connection map from skill files (e.g. /nexus-rebuild-architecture)"
+  - "Running subsystem-verification or a cross-skill connection audit"
+  - "Deriving a skill's read/write/invoke contract from its source"
+  - "Any scan whose output claims completeness over a skill's connections"
+  - "CAUTION: skip for genuinely single-flow skills with no secondary modes or conditional branches"
+
+# --- PAT-121 ---
+PAT-121.name: "match-remedy-form-to-failure-cause"
+PAT-121.file: "patterns/PAT-121.md"
+PAT-121.type: principle
+PAT-121.domain: "remediation-design"
+PAT-121.maturity: validated
+PAT-121.description: "When designing a fix for a recurring or systemic failure, choose the remedy's FORM to match the failure's CAUSE — an implicit-assumption failure needs an explicit deterministic checkpoint (not a judgment step), an incomplete-enumeration failure needs an executable predicate over the whole item-class (not a manual re-read). Prevents remedies that inherit the same skip-path as the original failure and leave the failure mode reachable."
+PAT-121.use_when:
+  - "Designing a remedy for a failure that has recurred or could recur"
+  - "Deciding whether to fold a new check into an existing judgment step vs. add a standalone deterministic checkpoint"
+  - "Choosing how to encode a safeguard, gate, or completeness check"
+  - "After diagnosing a failure's root cause, before encoding the fix"
+PAT-121.successes: 0
+PAT-121.failures: 0
+PAT-121.neutral: 0
+PAT-121.effectiveness: 0.70
+PAT-121.last_used: ""
+PAT-121.by_issue_type: {}
+PAT-121.phase_affinity: ["analysis", "implementation"]
+PAT-121.synergies: ["PAT-098"]
+PAT-121.conflicts: []
+
+# --- PAT-122 ---
+PAT-122.name: "honest-green-all-branches-all-environments"
+PAT-122.file: "patterns/PAT-122.md"
+PAT-122.type: principle
+PAT-122.domain: "testing"
+PAT-122.maturity: emerging
+PAT-122.description: "Earn 'green' on two axes before claiming it: branch completeness (a test branch that never executed — degrade/error/fail-open paths — is untested even when the suite reports pass) and environment honesty (a green that depends on hand-provisioned dependencies or author-machine tooling is contingent, not real). Force-exercise every branch and re-run in a clean environment; fix the suite or assert the honest fail-open contract rather than re-provisioning to restore green."
+PAT-122.use_when:
+  - "Before declaring a test suite or harness green, especially one with conditional degrade/error/fail-open branches"
+  - "When a test outcome could depend on environment state (installed deps, CLI tools, interpreter version, OS)"
+  - "When authoring or reviewing fail-open / graceful-degradation logic whose degrade branch a healthy author environment never triggers"
+  - "When re-running a suite previously declared green in a different environment than the current one"
+  - "CAUTION: not for trivial single-branch checks or deterministic in-process unit tests with no environment dependency"
+PAT-122.successes: 0
+PAT-122.failures: 0
+PAT-122.neutral: 0
+PAT-122.effectiveness: 0.50
+PAT-122.last_used: ""
+PAT-122.by_issue_type: {}
+PAT-122.phase_affinity: ["evaluation", "implementation"]
+PAT-122.synergies: ["PAT-063", "PAT-095"]
+PAT-122.conflicts: []
+
+# --- PAT-124 ---
+PAT-124.name: "verify-relocation-target"
+PAT-124.file: "patterns/PAT-124.md"
+PAT-124.type: principle
+PAT-124.domain: "content-relocation"
+PAT-124.maturity: validated
+PAT-124.description: "Before relocating or deferring content into a named target (file, section, issue, reference, or future shared home), verify the target both EXISTS and is in a LIVE lifecycle state — not resolved, archived, retired, renamed, wrong-scoped, or not-yet-created — before committing the move. A named target is a hypothesis until verified; deferring into a dead or nonexistent target silently orphans the work, and the loss surfaces only later when someone looks for content that was nominally 'handled.' If the target is a planned new home, the check resolves to 'create-target-first within this plan,' not blind deferral."
+PAT-124.use_when:
+  - "Relocating content into a references/ file, shared module, or another skill during a refactor or externalization"
+  - "Deferring work to a named target (later phase, follow-up issue, future sprint, section) in research deliverables or Build/Validate deviations"
+  - "An audit or synthesis recommends moving content into a target that does not yet exist (verify-or-create-target-first)"
+  - "Citing or pointing to a pattern/issue/section by ID — confirm the referent is still active, not retired/archived/renamed"
+  - "CAUTION: skip for trivial in-file moves where the target is self-evidently present and live"
+PAT-124.successes: 0
+PAT-124.failures: 0
+PAT-124.neutral: 0
+PAT-124.effectiveness: 0.70
+PAT-124.last_used: ""
+PAT-124.by_issue_type: {}
+PAT-124.phase_affinity: ["implementation", "research", "evaluation"]
+PAT-124.synergies: ["PAT-119", "PAT-113"]
+PAT-124.conflicts: []
+
+# --- PAT-125 ---
+PAT-125.name: "negative-space-verification"
+PAT-125.file: "patterns/PAT-125.md"
+PAT-125.type: principle
+PAT-125.domain: "batch-orchestration-quality"
+PAT-125.maturity: emerging
+PAT-125.description: "Distinguish schema-coverage (every field populated) from value-validity (every value correct). In schema-enforced multi-agent collection, systematic misclassification hides in the unverified negative space — the pass/clean/absent cells that findings-only spot-checks skip. Sample a deliberate quota of negative-space cells at validation time, and lock interpretation-sensitive criteria with a worked example before the fan-out so classification ambiguity cannot silently diverge across agents."
+PAT-125.use_when:
+  - "Running schema-enforced fan-out collection where any criterion carries semantic interpretation ambiguity (audit passes, LLM-judge rubrics, batch classifiers)"
+  - "Designing spot-check protocols for structured-output agents — encode a negative-space quota explicitly, not only findings-based sampling"
+  - "Before publishing quantitative claims from schema-forced boolean or enum fields (pass rates, coverage counts, per-criterion prevalence)"
+  - "When a criterion's precise rule was still being derived at fan-out time — treat pre-derivation classifications as provisional"
+  - "CAUTION: skip for deterministic criteria with no semantic ambiguity"
+PAT-125.successes: 0
+PAT-125.failures: 0
+PAT-125.neutral: 0
+PAT-125.effectiveness: 0.60
+PAT-125.last_used: ""
+PAT-125.by_issue_type: {}
+PAT-125.phase_affinity: ["research", "implementation", "evaluation"]
+PAT-125.synergies: ["PAT-095", "PAT-112"]
+PAT-125.conflicts: []
+
+# --- PAT-126 ---
+PAT-126.name: "calibrate-then-schema-enforce"
+PAT-126.file: "patterns/PAT-126.md"
+PAT-126.type: methodology
+PAT-126.domain: "multi-agent-orchestration"
+PAT-126.maturity: emerging
+PAT-126.description: "Two-phase multi-agent collection harness: (1) calibrate with a plain-agent pass on a representative group to expose prompt-obedience failures (packaging deviations, estimation habits, spurious fields), amend the dispatch prompt, and gate before the fan-out; (2) enforce structural contracts at the tool layer via schema-enforced agent calls (automatic validation+retry) so human review runs once at calibration, not N times at fan-out. Mechanical reconciliation (deterministic script over results vs frozen manifest) closes the coverage gap independently."
+PAT-126.use_when:
+  - "Dispatching N≥5 parallel agents where structural contract compliance is required and cannot be manually reviewed per-agent"
+  - "Any multi-agent result collection where prose-template instructions alone have proven unreliable"
+  - "Fan-out workflows with fixed result schemas (audit digests, classifier outputs, structured evaluations) where non-conforming results must not reach main-context consolidation"
+  - "When coverage proof is required — deterministic reconciliation integrates naturally alongside schema-enforced collection"
+  - "CAUTION: calibration requires a representative group; one calibration pass suffices if groups are structurally identical"
+PAT-126.successes: 0
+PAT-126.failures: 0
+PAT-126.neutral: 0
+PAT-126.effectiveness: 0.50
+PAT-126.last_used: ""
+PAT-126.by_issue_type: {}
+PAT-126.phase_affinity: ["research", "implementation"]
+PAT-126.synergies: ["PAT-095", "PAT-125"]
+PAT-126.conflicts: []
+
+# --- PAT-127 ---
+PAT-127.name: "fan-out-batch-economics"
+PAT-127.file: "patterns/PAT-127.md"
+PAT-127.type: methodology
+PAT-127.domain: "agent-orchestration"
+PAT-127.maturity: emerging
+PAT-127.description: "Sub-agent/Workflow fan-out cost is dominated by fixed per-spawn overhead (~31K tokens/call), not by per-task size — so before scaling a fan-out, batch many micro-decisions into each agent call rather than spawning one agent per unit. Treats units-per-call as the primary cost lever; amortizes fixed overhead and turns prohibitive corpus sweeps affordable (ISS-217: 88M naive → 4M batched, 6× per-decision)."
+PAT-127.use_when:
+  - "Designing a sub-agent or Workflow fan-out where work splits into many small independent units (per-skill, per-file, per-query, per-target)"
+  - "At a cost fork where the default instinct is one-agent-per-unit"
+  - "Planning a corpus-scale measurement, audit, or transformation sweep"
+  - "CAUTION: skip when each unit's task is already large (overhead is a small fraction) or units have cross-dependencies forbidding co-location"
+PAT-127.successes: 0
+PAT-127.failures: 0
+PAT-127.neutral: 0
+PAT-127.effectiveness: 0.50
+PAT-127.last_used: ""
+PAT-127.by_issue_type: {}
+PAT-127.phase_affinity: ["research", "analysis", "implementation"]
+PAT-127.synergies: []
+PAT-127.conflicts: []
+
+# --- PAT-128 ---
+PAT-128.name: "boundary-regime-measurement"
+PAT-128.file: "patterns/PAT-128.md"
+PAT-128.type: methodology
+PAT-128.domain: "measurement-design"
+PAT-128.maturity: emerging
+PAT-128.description: "To measure whether an input variable (description form, phrasing, prompt wording) affects an LLM's recognition/selection decision, place ground-truth probe queries at the recognition boundary (weak-match-to-the-target-candidate); strong-match queries — to candidate or to a sibling — saturate to unanimous decisions and hide the effect (null-by-construction). Validate the instrument with clean controls before trusting any rate; sensitivity is only observable where the decision is marginal."
+PAT-128.use_when:
+  - "Designing eval-set / ground-truth queries to measure description, routing, or prompt sensitivity to a controlled variable"
+  - "Running an A/B over LLM selection/trigger behavior where the delta attributable to form is the quantity of interest"
+  - "Any measurement where a null result must be distinguished from a saturated (zero-dynamic-range) instrument"
+  - "CAUTION: not for absolute-accuracy measurement — there, representative real queries are correct; boundary probing would distort it"
+PAT-128.successes: 0
+PAT-128.failures: 0
+PAT-128.neutral: 0
+PAT-128.effectiveness: 0.50
+PAT-128.last_used: ""
+PAT-128.by_issue_type: {}
+PAT-128.phase_affinity: ["research", "analysis"]
+PAT-128.synergies: ["PAT-127"]
+PAT-128.conflicts: []
+
+# --- PAT-129 ---
+PAT-129.name: "additive-diff-proof"
+PAT-129.file: "patterns/PAT-129.md"
+PAT-129.type: methodology
+PAT-129.domain: "change-verification"
+PAT-129.maturity: emerging
+PAT-129.description: "Verify a purely mechanical/structural change (fence balancing, reformatting, import reorder, rename, bulk find-replace) by classifying the diff's changed-line set — assert every changed line belongs to the intended token-class and zero content lines were removed — rather than re-reading authorial intent. The diff's line-class composition is the proof; pair it with a spot-render of the riskiest artifacts for effect. An even/aggregate count is necessary but not sufficient (compensating errors hide in it)."
+PAT-129.use_when:
+  - "Verifying a purely-mechanical or structural fix at Build or Validate (fence balancing, format normalization, import reorder, mechanical rename, bulk find-replace, code regeneration)"
+  - "Proving a change is additive-only or confined to one intended token-class against a baseline commit"
+  - "Independently re-deriving a Build's structural claim at adversarial Validate without trusting its narrative"
+  - "CAUTION: not for changes that alter logic/behavior/content — the token-class invariant doesn't hold there; use functional tests / intent-reading"
+PAT-129.successes: 0
+PAT-129.failures: 0
+PAT-129.neutral: 0
+PAT-129.effectiveness: 0.50
+PAT-129.last_used: ""
+PAT-129.by_issue_type: {}
+PAT-129.phase_affinity: ["implementation", "evaluation"]
+PAT-129.synergies: ["PAT-098", "PAT-125"]
+PAT-129.conflicts: []
+
+# --- PAT-130 ---
+PAT-130.name: "source-fix-over-symptom-machinery"
+PAT-130.file: "patterns/PAT-130.md"
+PAT-130.type: principle
+PAT-130.domain: "structural-design"
+PAT-130.maturity: emerging
+PAT-130.description: "Before optimizing, governing, or bridging a recurring symptom (a growing cost, a skipped rule, a contested ambiguity), fix the source structure that produces it — shrink the artifact, eliminate the branch, unbundle the concern — so the symptom-class and the machinery to handle it stop existing. Machinery around a symptom is cost paid forever; a source-fix is paid once."
+PAT-130.use_when:
+  - "About to add an optimizer, governing rule, enforcement check, or bridge to cope with something that recurs"
+  - "A recurring cost/skip/ambiguity tempts symptom-handling machinery AND the producing structure is editable in scope"
+  - "Caught optimizing HOW something loads/handles before asking whether it needs to be that large/branchy/bundled"
+  - "CAUTION: not when the source is fixed/external, the symptom is a genuine one-off, or restructuring is Major-magnitude and a bounded local handler is honestly cheaper"
+PAT-130.successes: 0
+PAT-130.failures: 0
+PAT-130.neutral: 0
+PAT-130.effectiveness: 0.55
+PAT-130.last_used: ""
+PAT-130.by_issue_type: {}
+PAT-130.phase_affinity: ["analysis", "implementation"]
+PAT-130.synergies: ["PAT-103"]
+PAT-130.conflicts: []
+
+# --- PAT-131 ---
+PAT-131.name: "tag-by-application-moment-not-subject"
+PAT-131.file: "patterns/PAT-131.md"
+PAT-131.type: principle
+PAT-131.domain: "classification"
+PAT-131.maturity: validated
+PAT-131.description: "A surface-when-relevant field (use_when, trigger, context, when-relevant, phase-affinity) only works if it is keyed to the MOMENT you would apply the item, not the SUBJECT it is about. Subject-tagging looks correct but silently mis-files the item so it never surfaces at the moment of need. Author each tag as the situation that should trigger retrieval."
+PAT-131.use_when:
+  - "Authoring or reviewing a use_when / trigger / context / when-relevant / phase-affinity field"
+  - "Designing a classification schema whose categories drive WHEN items surface, not just how they're filed"
+  - "A 'looks correct' tag isn't surfacing items at the moment of need (silent retrieval miss)"
+  - "CAUTION: not when the field is genuinely descriptive/archival (a topic label for browsing), or when subject and application-moment coincide"
+PAT-131.successes: 0
+PAT-131.failures: 0
+PAT-131.neutral: 0
+PAT-131.effectiveness: 0.65
+PAT-131.last_used: ""
+PAT-131.by_issue_type: {}
+PAT-131.phase_affinity: ["implementation"]
+PAT-131.synergies: ["PAT-066"]
+PAT-131.conflicts: []
+
+# --- PAT-132 ---
+PAT-132.name: "source-defect-census-before-migration"
+PAT-132.file: "patterns/PAT-132.md"
+PAT-132.type: practice
+PAT-132.domain: "data-migration"
+PAT-132.maturity: emerging
+PAT-132.description: "Census the SOURCE's defects — format eras, structural outliers, conflicting duplicates, voids — before designing a migration transform, then amend any Success Criterion the real source cannot satisfy. Shifting an absolute criterion ('no gap') to a documented-exception form ('no UNDOCUMENTED gap') is strictly stronger: it forbids both the silent-tolerance and silent-fabrication escapes. Converts an unmeetable criterion into an amendable one before it becomes a Build-time judgment call."
+PAT-132.use_when:
+  - "Migrating or backfilling an artifact that accreted across many development cycles"
+  - "A Success Criterion asserts a property of source data nobody has verified against the source"
+  - "Retiring a long-lived free-form file into a structured store"
+  - "Any transform whose completeness claim rests on a count derived from the source"
+  - "NOT for greenfield schema design or machine-generated data with an enforced schema"
+PAT-132.successes: 0
+PAT-132.failures: 0
+PAT-132.neutral: 0
+PAT-132.effectiveness: 0.50
+PAT-132.last_used: ""
+PAT-132.by_issue_type: {}
+PAT-132.phase_affinity: ["analysis"]
+PAT-132.synergies: ["PAT-114", "PAT-097", "PAT-133"]
+PAT-132.conflicts: []
+
+# --- PAT-133 ---
+PAT-133.name: "assert-before-destructive-write"
+PAT-133.file: "patterns/PAT-133.md"
+PAT-133.type: practice
+PAT-133.domain: "data-integrity"
+PAT-133.maturity: emerging
+PAT-133.description: "Encode completeness invariants as assertions INSIDE the writer so a one-shot bulk overwrite aborts rather than silently emitting a short file that later reads as complete. Prefer two independent arithmetics reaching the same total by different routes — a single count is self-confirming, since the error that dropped a record also lowered the expectation. Inverts write-then-verify for the case where verification-after can only report irreversible damage."
+PAT-133.use_when:
+  - "A one-shot bulk overwrite where the output's own shape is the only completeness signal"
+  - "Generating N records where N was derived from a source rather than given"
+  - "Any destructive write whose correctness a human would otherwise have to spot-check to trust"
+  - "Consolidating many inputs into a single artifact that later reads as authoritative"
+  - "NOT for incremental/append writes, nor for mechanical no-content-delta changes (use PAT-129)"
+PAT-133.successes: 0
+PAT-133.failures: 0
+PAT-133.neutral: 0
+PAT-133.effectiveness: 0.50
+PAT-133.last_used: ""
+PAT-133.by_issue_type: {}
+PAT-133.phase_affinity: ["implementation"]
+PAT-133.synergies: ["PAT-129", "PAT-122", "PAT-132"]
+PAT-133.conflicts: []
+
+# --- PAT-134 ---
+PAT-134.name: "grep-file-class-for-defect-shape"
+PAT-134.file: "patterns/PAT-134.md"
+PAT-134.type: practice
+PAT-134.domain: "defect-diagnosis"
+PAT-134.maturity: emerging
+PAT-134.description: "Before designing a fix, grep the whole homogeneous file-class for the defect's structural SHAPE (not its literal text) and ask two questions: where else does this defect live, and does a sibling already implement the correct form? Copy-adapt authorship distributes defects the same way it distributes correctness, so a defect in one member is evidence about the CLASS — and the cure often already sits next to the disease, turning design work into adoption."
+PAT-134.use_when:
+  - "A defect surfaces in one member of a homogeneous file-class (hooks, skills, templates, agents, handlers)"
+  - "Before designing a fix whose blast radius has not been established with an actual command"
+  - "When 'is this the only one?' has been answered by reasoning rather than by a grep"
+  - "When the correct form of a fix is unclear and inventing one feels necessary"
+  - "NOT for genuine singletons, or defects provably specific to one file's unique logic"
+PAT-134.successes: 0
+PAT-134.failures: 0
+PAT-134.neutral: 0
+PAT-134.effectiveness: 0.60
+PAT-134.last_used: ""
+PAT-134.by_issue_type: {}
+PAT-134.phase_affinity: ["analysis"]
+PAT-134.synergies: ["PAT-098", "PAT-058", "PAT-135"]
+PAT-134.conflicts: []
+
+# --- PAT-135 ---
+PAT-135.name: "evidence-artifact-proves-execution-not-adequacy"
+PAT-135.file: "patterns/PAT-135.md"
+PAT-135.type: principle
+PAT-135.domain: "remediation-design"
+PAT-135.maturity: emerging
+PAT-135.description: "Moving a discipline from 'assert you did it' to 'show what you ran' closes the SKIP hole and opens an ADEQUACY hole — the artifact proves an execution occurred, never that the predicate covered the class, and a well-shaped artifact stops reviewers at its shape. Pair every evidence-artifact requirement with a coverage check on the predicate itself: enumerate name variants, state the glob's breadth, treat a suspiciously low count as a predicate defect, and require a recorded artifact on the not-triggered branch too."
+PAT-135.use_when:
+  - "Designing a remedy that replaces prose guidance with a required receipt, log, or recorded command"
+  - "Authoring gate or checklist items that accept 'evidence' as proof of completion"
+  - "Reviewing a compliant-looking artifact whose per-class counts seem low"
+  - "Any discipline moving from self-assertion to demonstrated execution"
+  - "NOT when the predicate is machine-generated and cannot vary between executions"
+PAT-135.successes: 0
+PAT-135.failures: 0
+PAT-135.neutral: 0
+PAT-135.effectiveness: 0.55
+PAT-135.last_used: ""
+PAT-135.by_issue_type: {}
+PAT-135.phase_affinity: ["analysis", "evaluation"]
+PAT-135.synergies: ["PAT-121", "PAT-112", "PAT-122"]
+PAT-135.conflicts: []
+
+# --- PAT-136 ---
+PAT-136.name: "extend-the-positioned-mechanism"
+PAT-136.file: "patterns/PAT-136.md"
+PAT-136.type: principle
+PAT-136.domain: "mechanism-design"
+PAT-136.maturity: emerging
+PAT-136.description: "Before building a new gate, checkpoint, scheduler, or tracked operation, inventory what already runs at the required position or frequency and extend it instead. An existing mandatory mechanism at the right point that merely reports the wrong thing can have its required fields amended, inheriting unskippability for free; an existing pass that already opens the artifact at the right interval can host the new judgment, inheriting the correct clock for free. A new mechanism must earn both from zero and brings its own skip-path."
+PAT-136.use_when:
+  - "About to add a gate, marker, or enforcement step because a discipline was skipped or produced a wrong result"
+  - "About to register a scheduled operation, tracked cadence, or maintenance cycle for recurring hygiene work"
+  - "An existing mandatory mechanism sits at the right workflow point but reports a proxy (size, presence, count) instead of the property that matters"
+  - "Deciding where a new judgment should live, as distinct from what the judgment should be"
+  - "CAUTION: not when the candidate host is drifted, deprecated, or already overloaded - extending inherits its problems too"
+PAT-136.successes: 0
+PAT-136.failures: 0
+PAT-136.neutral: 0
+PAT-136.effectiveness: 0.55
+PAT-136.last_used: ""
+PAT-136.by_issue_type: {}
+PAT-136.phase_affinity: ["analysis", "implementation"]
+PAT-136.synergies: ["PAT-130", "PAT-121", "PAT-113"]
+PAT-136.conflicts: []
+
+# --- PAT-137 ---
+PAT-137.name: "check-the-other-writer"
+PAT-137.file: "patterns/PAT-137.md"
+PAT-137.type: practice
+PAT-137.domain: "shared-artifact-integrity"
+PAT-137.maturity: emerging
+PAT-137.description: "When a change makes a component the second writer to a shared artifact, open every OTHER writer and check what each assumes it owns exclusively - id namespace, sequence, counter, ordering, uniqueness. Fixing the documentation that NAMES the writers feels like completion but changes nothing at runtime: the writer table is a map, and only writers collide. Enumerate writers from source, never from the document you are about to update."
+PAT-137.use_when:
+  - "A change adds a writer to an artifact that already has one - append-only stores, JSONL logs, registries, sequence files, shared state"
+  - "Updating documentation that enumerates the writers of a shared artifact - treat that edit as the signal, not the fix"
+  - "A design shows two arrows into the same store, or a write path is duplicated for a new route"
+  - "A shared artifact allocates ids, sequences, or counters that downstream pointers resolve through"
+  - "CAUTION: skip when writes are serialised through one owner, or the store itself enforces disjoint key spaces"
+PAT-137.successes: 0
+PAT-137.failures: 0
+PAT-137.neutral: 0
+PAT-137.effectiveness: 0.55
+PAT-137.last_used: ""
+PAT-137.by_issue_type: {}
+PAT-137.phase_affinity: ["analysis", "implementation"]
+PAT-137.synergies: ["PAT-124", "PAT-083", "PAT-098"]
+PAT-137.conflicts: []
+
+# --- PAT-138 ---
+PAT-138.name: "check-the-instrument-before-the-reading"
+PAT-138.file: "patterns/PAT-138.md"
+PAT-138.type: principle
+PAT-138.domain: "verification-design"
+PAT-138.maturity: emerging
+PAT-138.description: "Audit the instrument before acting on its reading. A red test is a claim about TWO artifacts - implementation and harness - and the harness is cheaper to check first (does the fixture carry the condition? does the oracle measure the right thing?). A before/after gate's two figures must come from one identically-written command reproduced verbatim at both sites; prose agreement that both sides use the same convention is exactly what lets them drift, and an under-specified instrument fails toward CLEAN."
+PAT-138.use_when:
+  - "A test or check returns a failure against work believed correct - before editing the implementation"
+  - "Designing or reviewing a gate that compares a BEFORE figure against an AFTER figure"
+  - "A verification reports clean or returns ZERO findings - assert the checker consumed rows before trusting the zero"
+  - "Reviewing a verification claim where no second independent source exists to compare against"
+  - "CAUTION: when multiple independent sources already disagree, compare sources (PAT-097) rather than auditing one"
+PAT-138.successes: 0
+PAT-138.failures: 0
+PAT-138.neutral: 0
+PAT-138.effectiveness: 0.60
+PAT-138.last_used: ""
+PAT-138.by_issue_type: {}
+PAT-138.phase_affinity: ["implementation", "evaluation"]
+PAT-138.synergies: ["PAT-097", "PAT-122", "PAT-135", "PAT-129", "PAT-142"]
+PAT-138.conflicts: []
+
+# --- PAT-139 ---
+PAT-139.name: "dogfood-the-mechanism-on-its-own-change"
+PAT-139.file: "patterns/PAT-139.md"
+PAT-139.type: practice
+PAT-139.domain: "mechanism-validation"
+PAT-139.maturity: emerging
+PAT-139.description: "Run a new check, census, or gate against the very change that authored it - and again against any later change that repairs it. The repair case carries most of the value: whoever amends a mechanism holds its design in mind and therefore feels the least need to search for prior art, making them the person most likely to author a duplicate authority instead of a citation. The authoring change usually meets the mechanism's own trigger, so the test is free."
+PAT-139.use_when:
+  - "A change authors a new completeness check, census, audit step, or validation mechanism - before calling the work done"
+  - "A change amends or repairs an existing mechanism - run the mechanism against the amendment before writing it"
+  - "Reviewing a newly-shipped mechanism whose only evidence of correctness is that it was written carefully"
+  - "The authoring change itself meets the mechanism's stated trigger conditions"
+  - "CAUTION: when the mechanism cannot fire at its own pre-execution call site (the bootstrap case), run it retrospectively and record why, rather than claiming the normal path"
+PAT-139.successes: 0
+PAT-139.failures: 0
+PAT-139.neutral: 0
+PAT-139.effectiveness: 0.60
+PAT-139.last_used: ""
+PAT-139.by_issue_type: {}
+PAT-139.phase_affinity: ["implementation", "evaluation"]
+PAT-139.synergies: ["PAT-125", "PAT-098"]
+PAT-139.conflicts: []
+
+# --- PAT-140 ---
+PAT-140.name: "probe-metric-responsiveness"
+PAT-140.file: "patterns/PAT-140.md"
+PAT-140.type: principle
+PAT-140.domain: "metric-validity"
+PAT-140.maturity: emerging
+PAT-140.description: "Probe whether a metric can actually respond to the thing it claims to measure before trusting it — apply a known-good improvement to the measured subject and require a delta in the expected DIRECTION, not merely a magnitude. Absence of response is a defect in the instrument, not evidence of stability, and a flat score default-reads as health, which is why insensitivity survives many measurement cycles undetected. Three signatures: no movement under real improvement (insensitive), wrong direction after a correctness fix (weights contradict the spec they implement), or dominance by an age/count/staleness term (measuring elapsed time, not health)."
+PAT-140.use_when:
+  - "About to report a health score, quality index, or KPI as 'stable' after several cycles of little or no movement"
+  - "About to consume a score for a trend line, velocity calibration, or a keep/retire decision"
+  - "A genuine correctness fix or known-good remediation just moved a score in the unexpected direction"
+  - "Reviewing a scoring formula that claims to implement a documented ladder, rubric, or maturity spec"
+  - "CAUTION: not for a metric legitimately saturated at an intended floor/ceiling, and not for doubt about a SINGLE reading — audit that instrument with PAT-138 instead"
+PAT-140.successes: 0
+PAT-140.failures: 0
+PAT-140.neutral: 0
+PAT-140.effectiveness: 0.60
+PAT-140.last_used: ""
+PAT-140.by_issue_type: {}
+PAT-140.phase_affinity: ["analysis", "evaluation"]
+PAT-140.synergies: ["PAT-138", "PAT-097"]
+PAT-140.conflicts: []
+
+# --- PAT-141 ---
+PAT-141.name: "kill-condition-for-external-contracts"
+PAT-141.file: "patterns/PAT-141.md"
+PAT-141.type: principle
+PAT-141.domain: "dependency-integrity"
+PAT-141.maturity: emerging
+PAT-141.description: "Attach a verifiable kill condition — a concrete, inspectable statement of what would make the dependency false — alongside every citation of an external tool, skill, library, API, or platform capability, rather than recording the citation alone. A citation asserts existence with no expiry and cannot detect the environment changing underneath it; a kill condition turns silent rot into a check any routine pass can run. Author-side and re-checked at activation, so it protects artifacts that WAIT — which is precisely when execution-time premise verification cannot fire."
+PAT-141.use_when:
+  - "Authoring an issue, plan, spec, or success criterion whose completion depends on an external tool, skill, library, API, or platform capability"
+  - "Activating or scheduling a backlog artifact that names an external capability — before committing a sprint to it"
+  - "Recording a dependency as a bare path, tool name, or version string with no statement of what would make it false"
+  - "Reviewing an artifact that has waited several cycles and rests on something outside the project's own version control"
+  - "CAUTION: not for dependencies inside the project's own repository, where a change is visible in the same diff and the citation cannot silently rot"
+PAT-141.successes: 0
+PAT-141.failures: 0
+PAT-141.neutral: 0
+PAT-141.effectiveness: 0.55
+PAT-141.last_used: ""
+PAT-141.by_issue_type: {}
+PAT-141.phase_affinity: ["analysis", "implementation"]
+PAT-141.synergies: ["PAT-119", "PAT-124", "PAT-136"]
+PAT-141.conflicts: []
+
+# --- PAT-142 ---
+PAT-142.name: "bound-the-audit-predicate-both-directions"
+PAT-142.file: "patterns/PAT-142.md"
+PAT-142.type: methodology
+PAT-142.domain: "audit-design"
+PAT-142.maturity: emerging
+PAT-142.description: "Bound a mechanical audit by enumerating its predicate's two failure directions before running it — the claim-classes no flagged token can reach (too narrow) and the live constructs that share a flagged spelling (too broad). Phrase the exit criterion as 'every hit is fixed or classified', never 'grep returns 0', so the audit cannot pass vacuously or be satisfiable only by corrupting correct files."
+PAT-142.use_when:
+  - "Authoring a token-based sweep — dead-code removal, deprecated-API purges, secret scanning, banned-word checks, documentation truth-passes"
+  - "Writing the exit or success criterion for an audit, especially one phrased as a count reaching zero"
+  - "Designing a checklist that mixes grep-shaped detectors with judgment-shaped ones"
+  - "An audit reported clean over a corpus nobody believes is clean"
+  - "CAUTION: skip for a genuinely closed token set with no live homonyms"
+PAT-142.successes: 0
+PAT-142.failures: 0
+PAT-142.neutral: 0
+PAT-142.effectiveness: 0.60
+PAT-142.last_used: ""
+PAT-142.by_issue_type: {}
+PAT-142.phase_affinity: ["analysis", "implementation", "evaluation"]
+PAT-142.synergies: ["PAT-135", "PAT-138", "PAT-125"]
+PAT-142.conflicts: []
+
+# --- PAT-143 ---
+PAT-143.name: "diff-parallel-reports-against-each-other"
+PAT-143.file: "patterns/PAT-143.md"
+PAT-143.type: practice
+PAT-143.domain: "parallel-execution"
+PAT-143.maturity: emerging
+PAT-143.description: "Require fan-out workers and independent reviewers to report verdicts on SHARED facts, then diff the reports against each other before accepting any of them — per-target conformance is structurally blind to cross-worker disagreement. Resolve every disagreement to a primary source, never to a majority, a confidence level, or seniority, because disagreement means the question is underspecified and both sides may be wrong."
+PAT-143.use_when:
+  - "Dispatching a batch or sub-agent fan-out where multiple workers touch the same triggers, thresholds, or vocabulary"
+  - "Reconciling findings from two or more independent reviewers over one artifact"
+  - "Designing the return protocol for a parallel audit — deciding what workers must report, not only what they must do"
+  - "A parallel run finished and every individual report passed its own conformance check"
+  - "CAUTION: needs shared facts to exist — purely disjoint per-target work has nothing to diff"
+PAT-143.successes: 0
+PAT-143.failures: 0
+PAT-143.neutral: 0
+PAT-143.effectiveness: 0.50
+PAT-143.last_used: ""
+PAT-143.by_issue_type: {}
+PAT-143.phase_affinity: ["implementation", "evaluation"]
+PAT-143.synergies: ["PAT-127", "PAT-095", "PAT-125"]
+PAT-143.conflicts: []
+
+# --- PAT-144 ---
+PAT-144.name: "separate-a-rules-signal-from-its-diagnosis"
+PAT-144.file: "patterns/PAT-144.md"
+PAT-144.type: principle
+PAT-144.domain: "rule-design"
+PAT-144.maturity: emerging
+PAT-144.description: "Author a threshold rule's mechanical trigger separately from its stated cause, with a classification step between them, so the STOP branch stays sharp for the cause it was written for while every other cause gets a bounded fenced proceed-path. A rule shaped 'if X then STOP because X means Y' decays silently — each override is locally correct, so nothing ever marks the drift."
+PAT-144.use_when:
+  - "Authoring or reviewing a threshold rule that names a cause — escalation limits, lint severities, alert runbooks, circuit breakers, size caps"
+  - "A rule has been overridden more than once and each override was defensible on its own terms"
+  - "Writing a STOP condition another person or agent will execute without the author present"
+  - "A gate's stated rationale and its actual firing condition are drifting apart"
+  - "CAUTION: not for a trigger with exactly one possible cause"
+PAT-144.successes: 0
+PAT-144.failures: 0
+PAT-144.neutral: 0
+PAT-144.effectiveness: 0.50
+PAT-144.last_used: ""
+PAT-144.by_issue_type: {}
+PAT-144.phase_affinity: ["analysis", "implementation"]
+PAT-144.synergies: ["PAT-121", "PAT-118", "PAT-102"]
+PAT-144.conflicts: []
+
+# --- PAT-145 ---
+PAT-145.name: "a-deferred-ruling-still-ships-its-consequence"
+PAT-145.file: "patterns/PAT-145.md"
+PAT-145.type: principle
+PAT-145.domain: "decision-hygiene"
+PAT-145.maturity: emerging
+PAT-145.description: "At every deferral, record two things — what was deferred, and what state is left standing until it is ruled — then apply the cheapest qualifier or pointer that mitigates the second without deciding the first. Deferring a ruling is not deferring its consequence, and the recorded reason makes contradictory shipped state look adjudicated, so later reviews inherit the verdict instead of re-examining it."
+PAT-145.use_when:
+  - "Recording a deferral, an out-of-scope ruling, or a 'not this issue' routing decision"
+  - "Reviewing a finding an earlier phase marked deferred-by-design, at Validate or at closure"
+  - "Closing an issue or sprint that carries known-unresolved contradictions"
+  - "Two artifacts disagree and the disagreement is about to be recorded as intentional"
+  - "CAUTION: does not fire when the standing state is merely incomplete — silence is not contradiction"
+PAT-145.successes: 0
+PAT-145.failures: 0
+PAT-145.neutral: 0
+PAT-145.effectiveness: 0.50
+PAT-145.last_used: ""
+PAT-145.by_issue_type: {}
+PAT-145.phase_affinity: ["analysis", "evaluation"]
+PAT-145.synergies: ["PAT-113", "PAT-119", "PAT-084"]
+PAT-145.conflicts: []
+
+# --- PAT-146 ---
+PAT-146.name: "constrain-figure-production-path"
+PAT-146.file: "patterns/PAT-146.md"
+PAT-146.type: principle
+PAT-146.domain: "verification-contracts"
+PAT-146.maturity: emerging
+PAT-146.description: "Require a contract's mandated proof figure to be independently derived and incremented only after its fallible step, never assigned from or lockstepped with its counterpart — closing the gap where authors satisfy a reporting mandate's letter without its substance."
+PAT-146.use_when:
+  - "Authoring or reviewing a verification contract requiring a consumption/coverage proof figure"
+  - "Auditing an existing check whose reported figure never seems to move or always matches its counterpart exactly"
+  - "Designing a pass condition that depends on comparing two counted quantities"
+PAT-146.successes: 0
+PAT-146.failures: 0
+PAT-146.neutral: 0
+PAT-146.effectiveness: 0.50
+PAT-146.last_used: ""
+PAT-146.by_issue_type: {}
+PAT-146.phase_affinity: ["analysis", "implementation", "evaluation"]
+PAT-146.synergies: []
+PAT-146.conflicts: []
+
+# --- ADD NEW PATTERNS HERE ---

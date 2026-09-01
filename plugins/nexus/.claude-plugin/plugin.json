@@ -1,0 +1,11 @@
+{
+  "name": "nexus",
+  "description": "NEXUS harness installer. /nexus:setup copies the framework into your project root and configures Claude Code; /nexus:upgrade compares your local copy against this plugin's golden copy. Everything else NEXUS does is project-local and user-owned by design.",
+  "version": "5.16.0",
+  "author": {
+    "name": "avdiam"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/avdiam/nexus-framework",
+  "keywords": ["framework", "workflow", "project-management", "sprints", "harness"]
+}
